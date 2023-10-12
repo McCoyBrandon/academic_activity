@@ -1,9 +1,9 @@
 Academic Activity Task and Portfolio Assistant
 
 Team Members:
-Harish Korukonda
-Vardhan Pothu
-Vineetha Ravulapalli
+Harish Korukonda,
+Vardhan Pothu,
+Vineetha Ravulapalli,
 Brandon McCoy
 
 Product Description:
