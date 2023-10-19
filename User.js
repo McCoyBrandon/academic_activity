@@ -1,10 +1,11 @@
 class User {
     #password;
 
-    constructor(userID, email, password){
+    constructor(userID, email, password, projectList = []){
         if(userNameAvaliable(userID)){ // need to create call function to check userList
             this.userID = userID;
             this.email = email;
+            this.projectList = projectList;
             this.#password = password;
         }
     }
@@ -19,5 +20,17 @@ class User {
 
     emailReset(newEmail){
         this.email = newEmail;
+    }
+
+    addProject(newProject){
+        this.projectList.push(newProject);
+    }
+
+    removeProject(projectIndex){
+        this.projectList.splice(projectIndex, 1);
+    }
+
+    getProject(projectIndex){
+        return this.projectList.at(projectIndex);
     }
 }
