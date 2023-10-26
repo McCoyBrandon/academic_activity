@@ -11,6 +11,9 @@ const client = new MongoClient(uri, {
   }
 });
 
+// Creating a constant for direct reference to the Tasks collection in MongoDB
+const tasksClient = client.db("Academic_Activity").collection("Tasks");
+
 
 class Task {
     #taskID;
@@ -38,7 +41,7 @@ class Task {
 Function: Finds and returns the task from the MongoDB
 Return: Task object or false
 */
-function findTask(client, userID){
+async function findTask(userID){
     
 }
 
@@ -47,7 +50,7 @@ function findTask(client, userID){
 Function: Check's if an ID is avaliable
 Returns: True/False if avaliable
 */
-function taskIdAvaliable(client, taskID){
+async function taskIdAvaliable(taskID){
 
 }
 
@@ -55,8 +58,18 @@ function taskIdAvaliable(client, taskID){
 Function: Create a new task in the MongoDB database
 Returns: True/False if successful
 */
-function createTask(client){
+async function createTask(name){
+    entry = {Name: name}
+    try {
+        // Connect the client to the server	(optional starting in v4.7)
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await tasksClient.insertone(entry);
 
+      } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
 } 
 
 
@@ -64,7 +77,7 @@ function createTask(client){
 Function: Update a task name in the MongoDB database
 Returns: True/False if successful
 */
-function updateTaskName(client, taskID, name){
+async function updateTaskName(taskID, name){
 
 }
 
@@ -72,7 +85,7 @@ function updateTaskName(client, taskID, name){
 Function: Update a task ID in the MongoDB database
 Returns: True/False if successful
 */
-function updateTaskID(client, taskID, newID){
+async function updateTaskID(taskID, newID){
 
 }
 
@@ -80,6 +93,14 @@ function updateTaskID(client, taskID, newID){
 Function: Delete a task in the MongoDB database
 Returns: True/False if successful
 */
-function deleteProject(client, taskID){
-
+async function deleteProject(taskID){
+    try {
+        // Connect the client to the server
+        await client.connect();
+        // Send request to delete a task on MongoDB
+        await tasksClient.deleteOne({_id: taskID});
+      } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
 }

@@ -11,6 +11,9 @@ const client = new MongoClient(uri, {
   }
 });
 
+// Creating a constant for direct reference to the Users collection in MongoDB
+const projectsClient = client.db("Academic_Activity").collection("Projects");
+
 class Project {
     #projectID;
 
@@ -49,18 +52,21 @@ class Project {
 }
 
 /*
-Function: Check's if an ID is avaliable
-Returns: True/False if avaliable
-*/
-function projectIdAvaliable(client, projectID){
-
-}
-
-/*
 Function: Create a new project without a task list in the MongoDB database
 Returns: True/False if successful
 */
-function createProject(client, name, ID){
+async function createProject(name){
+    entry = {Name: name}
+    try {
+        // Connect the client to the server	(optional starting in v4.7)
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await projectsClient.insertone(entry);
+
+      } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
 
 } 
 
@@ -68,15 +74,26 @@ function createProject(client, name, ID){
 Function: Create a new project with task list in the MongoDB database
 Returns: True/False if successful
 */
-function createProjectWithTasks(client, name, ID, tasks = []){
+async function createProjectWithTasks(name, tasks = []){
+    entry = {Name: name,
+            Tasks: tasks}
+    try {
+        // Connect the client to the server
+        await client.connect();
+        // Send a ping to confirm a successful connection
+        await projectsClient.insertone(entry);
 
+      } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
 }
 
 /*
 Function: Update a project with task list in the MongoDB database
 Returns: True/False if successful
 */
-function updateProjectName(client, projectID, name){
+async function updateProjectName(projectID, name){
 
 }
 
@@ -84,7 +101,7 @@ function updateProjectName(client, projectID, name){
 Function: Update a project task list in the MongoDB database
 Returns: True/False if successful
 */
-function updateProjectTasks(client, projectID, tasks = []){
+async function updateProjectTasks(projectID, tasks = []){
 
 }
 
@@ -92,6 +109,15 @@ function updateProjectTasks(client, projectID, tasks = []){
 Function: Update a project task list in the MongoDB database
 Returns: True/False if successful
 */
-function deleteProject(client, projectID){
+async function deleteProject(projectID){
+    try {
+        // Connect the client to the server
+        await client.connect();
+        // Send request to delete a project on MongoDB
+        await projectsClient.deleteOne({_id: projectID});
 
+      } finally {
+        // Ensures that the client will close when you finish/error
+        await client.close();
+    }
 }

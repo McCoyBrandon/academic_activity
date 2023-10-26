@@ -11,6 +11,9 @@ const client = new MongoClient(uri, {
   }
 });
 
+// Creating a constant for direct reference to the Users collection in MongoDB
+const usersClient = client.db("Academic_Activity").collection("Users");
+
 class User {
     #password;
 
@@ -49,10 +52,36 @@ class User {
 }
 
 /*
+Function: Create a user in the MongoDB database
+Returns: True/False if successful
+*/
+async function createTask(userName, email, password){
+    entry = {UserID: userName,
+            email: email,
+            password: password}
+    
+    if userIDAvaliable(userName){
+        try {
+            // Connect the client to the server
+            await client.connect();
+            // Send an insert rerquest.
+            await usersClient.insertone(entry);
+
+        } finally {
+            // Ensures that the client will close when you finish/error
+            await client.close();
+        }
+        return true;
+    } else {
+        return false;
+    }
+} 
+
+/*
 Function: Finds and returns the User from the MongoDB.
 Returns: User class or '-1' if it can't find the user.
 */
-function findUser(client, userID){
+function findUser(userID){
 
 }
 
@@ -60,15 +89,16 @@ function findUser(client, userID){
 Function: Check's if an ID is avaliable
 Returns: True/False if avaliable
 */
-function userIdAvaliable(client, userID){
-
+async function userIdAvaliable(userID){
+    const result = await usersClient.findOne({UserID: userID});
+    return result;
 }
 
 /*
 Function: Create a new project without a task list in the MongoDB database for a user
 Returns: True/False if successful
 */
-function createProject(client, name, ID){
+async function createProject(name, ID){
 
 } 
 
@@ -76,7 +106,7 @@ function createProject(client, name, ID){
 Function: Create a new project with task list in the MongoDB database for a user
 Returns: True/False if successful
 */
-function createProjectWithTasks(client, name, ID, tasks = []){
+async function createProjectWithTasks(name, ID, tasks = []){
 
 }
 
@@ -84,7 +114,7 @@ function createProjectWithTasks(client, name, ID, tasks = []){
 Function: Update a project with task list in the MongoDB database for a user
 Returns: True/False if successful
 */
-function updateProjectName(client, projectID, name){
+async function updateProjectName(projectID, name){
 
 }
 
@@ -92,7 +122,7 @@ function updateProjectName(client, projectID, name){
 Function: Update a project task list in the MongoDB database for a user
 Returns: True/False if successful
 */
-function updateProjectTasks(client, projectID, tasks = []){
+function updateProjectTasks(projectID, tasks = []){
 
 }
 
@@ -100,7 +130,7 @@ function updateProjectTasks(client, projectID, tasks = []){
 Function: Delete a user in the MongoDB database for a user
 Returns: True/False if successful
 */
-function deleteUser(client, projectID){
+async function deleteUser(projectID){
 
 }
 
@@ -108,7 +138,7 @@ function deleteUser(client, projectID){
 Function: Validates the User's password
 Returns: UserObject or False
 */
-function validatePasswordUserID(client, userID, password){
+async function validatePasswordUserID(userID, password){
 
 }
 
@@ -116,7 +146,7 @@ function validatePasswordUserID(client, userID, password){
 Function: Validates the User's password
 Returns: User object or False
 */
-function validatePasswordEmail(client, email, password){
+async function validatePasswordEmail(email, password){
 
 }
 
@@ -124,6 +154,6 @@ function validatePasswordEmail(client, email, password){
 Function: Change Password
 Return: True/False on success
 */
-function resetPassword(client, oldPassword, newPassword){
+async function resetPassword(oldPassword, newPassword){
 
 }
