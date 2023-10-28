@@ -1,0 +1,110 @@
+/* Overall Layout and Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 500px;
+    margin-top: 5vh;
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* animation: fadeIn 1s ease-in-out; */
+  
+    /* Background gradient similar to dashboard */
+    /* linear-gradient(45deg, #6DD5FA, #FF758C) */
+    background: linear-gradient(45deg, #6DD5FA 0%, #FF758C 100%);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Header */
+  .header h1 {
+    text-align: center;
+    color: #fff;
+    font-size: 3rem;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2); /* Text shadow for contrast */
+  }
+  
+  .underline {
+    width: 100px;
+    height: 5px;
+    background: linear-gradient(to right, #4a90e2, #007bff);
+    margin: 10px auto;
+    border-radius: 3px;
+  }
+  
+  /* Inputs */
+  .inputs {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+  
+  .input {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .input:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .input img {
+    margin: 0 20px;
+  }
+  
+  .input input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #333;
+    font-size: 1.2rem;
+  }
+  
+  /* Buttons */
+  .my-button {
+    border: 0;
+    line-height: 2.8;
+    padding: 0 25px;
+    font-size: 1.2rem;
+    text-align: center;
+    color: #fff;
+    border-radius: 15px;
+    background: linear-gradient(to right, #4a90e2, #007bff);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out, background-color 0.3s ease-in-out;
+  }
+  
+  .my-button:hover {
+    transform: scale(1.05);
+    background: linear-gradient(to right, #3a78c8, #0066cc);
+  }
+  
+  .my-button:active {
+    transform: scale(0.95);
+  }
+  
+  /* Submit Container */
+  .submit-container {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 40px;
+  }
+  
