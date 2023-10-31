@@ -20,7 +20,7 @@ app.listen(5038,()=>{
     })
 })
 
-
+// this get request is for login
 app.get('/api/user/getnotes', (request, response) => {
   const userEmail = request.query.userEmail;
   const userPassword = request.query.userPassword;
@@ -38,7 +38,7 @@ app.get('/api/user/getnotes', (request, response) => {
   });
 });
 
-
+// this post request is for signin
 app.post('/api/user/addnotes', multer().none(), (request, response) => {
     database.collection("user_credentials").countDocuments({}, (error, numofDocs) => {
         if (error) {
@@ -63,6 +63,7 @@ app.post('/api/user/addnotes', multer().none(), (request, response) => {
 
 
 //splint 2
+// this post request create and add project
 app.post('/api/user/createProjects', multer().none(), (request, response) => {
     database.collection("UserProjects").countDocuments({}, (error, numofDocs) => {
         if (error) {
@@ -84,6 +85,7 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
     });
 });
 
+//this get request is for viewing the projects
 app.get('/api/user/viewAllProjects', (request, response) => {
     const userId = request.query.userId;
     //console.log(request.query.userId);

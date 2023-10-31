@@ -29,7 +29,7 @@ const LoginScreen = () => {
     };
   };
 
-  
+  // get request for get the user Id
   const fetchData = async () => {
     setLoading(true);
     try {

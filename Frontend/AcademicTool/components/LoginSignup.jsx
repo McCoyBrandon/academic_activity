@@ -37,6 +37,7 @@ const LoginSignup = () => {
     });
   };
 
+  // console the signin data
   const handleFormSubmit = () => {
     {
       const signupData = {
