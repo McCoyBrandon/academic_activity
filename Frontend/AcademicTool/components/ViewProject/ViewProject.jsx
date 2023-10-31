@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ViewProject.css'; // Make sure to create and link this CSS file
+import './ViewProject.css'; // Ensure appropriate styling is done in this CSS file
 
 const ViewProject = () => {
-  const [projects, setProjects] = useState([
-    // Dummy Data for demonstration
-    { id: 1, title: 'Project One', description: 'This is the first project.' },
-    { id: 2, title: 'Project Two', description: 'This is the second project.' },
-    // ... more projects
-  ]);
+  const [projects, setProjects] = useState([]);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('/api/projects');
-        setProjects(response.data);
+        // Replace with your actual API endpoint
+        const response = await axios.get('http://localhost:5038/api/user/viewAllProjects');
+        // Assuming the API returns an object with a 'projects' array
+        // Null check for response.data and response.data.projects
+        console.log("response",response)
+        const fetchedProjects = response.data && response.data ? response.data : [];
+        setProjects(fetchedProjects);
       } catch (error) {
-        // Handle error
+        console.error("Error fetching projects:", error);
+        // Optionally, handle error (e.g., show an error message)
       }
     };
 
@@ -25,12 +26,24 @@ const ViewProject = () => {
 
   return (
     <div className="project-container">
-      {projects.map(project => (
-        <div key={project.id} className="project-card">
-          <h3>{project.title}</h3>
-          <p>{project.description}</p>
-        </div>
-      ))}
+      {projects.length > 0 ? (
+        projects.map(project => (
+          <div key={project.id} className="project-card">
+            <h3>{project.title || 'No Title'}</h3>
+            <p>{project.description || 'No Description'}</p>
+            {/* Check for tasks and render if available */}
+            {project.tasks && project.tasks.length > 0 && (
+              <ul>
+                {project.tasks.map((task, index) => (
+                  <li key={index}>{task.taskName || 'Unnamed Task'}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        ))
+      ) : (
+        <p>No projects found.</p> // Message displayed when there are no projects
+      )}
     </div>
   );
 };

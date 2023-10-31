@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-20px); }
@@ -24,11 +25,11 @@ const pulseAnimation = keyframes`
 `;
 
 const FormTitle = styled('h2')({
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: '30px',
-    animation: `${pulseAnimation} 2s infinite`,
-  });
+  color: '#FFFFFF',
+  textAlign: 'center',
+  marginBottom: '30px',
+  animation: `${pulseAnimation} 2s infinite`,
+});
 
 const StyledForm = styled('form')({
   display: 'flex',
@@ -37,20 +38,20 @@ const StyledForm = styled('form')({
 });
 
 const StyledInput = styled('input')({
-    padding: '10px',
-    borderRadius: '5px',
-    border: 'none',
-    outline: 'none',
-    background: '#FFFFFF', 
+  padding: '10px',
+  borderRadius: '5px',
+  border: 'none',
+  outline: 'none',
+  background: '#FFFFFF',
+  color: '#000000',
+  '&::placeholder': {
     color: '#000000',
-    '&::placeholder': { 
-      color: '#000000',
-      opacity: 1
-    },
-    '&:focus': {
-      boxShadow: '0 0 0 2px #FF758C',
-    },
-  });
+    opacity: 1
+  },
+  '&:focus': {
+    boxShadow: '0 0 0 2px #FF758C',
+  },
+});
 const StyledButton = styled('button')({
   padding: '10px 20px',
   borderRadius: '5px',
@@ -64,14 +65,65 @@ const StyledButton = styled('button')({
   },
 });
 
-const CreateProjectForm = () => {
-  const [formData, setFormData] = useState({ title: '', courseName: '', startTime: '', endTime: '' });
+const TaskContainer = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '10px',
+  marginBottom: '15px',
+});
 
+const RemoveButton = styled(StyledButton)({
+  backgroundColor: '#FF6347', // Example: Tomato red for remove button
+  color: '#FFFFFF',
+  '&:hover': {
+    backgroundColor: '#FF4500', // Darker red on hover
+  },
+});
+
+
+
+const CreateProjectForm = () => {
+
+  const history = useNavigate();
+
+
+  const [formData, setFormData] = useState({
+    title: '',
+    courseName: '',
+    startTime: '',
+    endTime: '',
+    description: '',
+    tasks: [{ taskName: '', assigned: '' }],
+  });
+
+  const handleTaskChange = (index, event) => {
+    const updatedTasks = formData.tasks.map((task, i) => {
+      if (index === i) {
+        return { ...task, [event.target.name]: event.target.value };
+      }
+      return task;
+    });
+    setFormData({ ...formData, tasks: updatedTasks });
+  };
+  const addTask = () => {
+    setFormData({
+      ...formData,
+      tasks: [...formData.tasks, { taskName: '', assigned: '' }],
+    });
+  };
+
+  const removeTask = (index) => {
+    const updatedTasks = formData.tasks.filter((_, i) => i !== index);
+    setFormData({ ...formData, tasks: updatedTasks });
+  };
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/projects', formData);
-      // Handle response
+      const response = await axios.post('http://localhost:5038/api/user/createProjects', formData);
+      // Handle successful response
+      history('/projects/viewProjects'); // Navigate to viewprojects page
     } catch (error) {
       // Handle error
     }
@@ -80,7 +132,6 @@ const CreateProjectForm = () => {
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
-
   return (
     <FormContainer>
       <FormTitle>Create New Project</FormTitle>
@@ -113,6 +164,39 @@ const CreateProjectForm = () => {
           onChange={handleChange}
           placeholder='End Time'
         />
+        <StyledInput
+          type="text"
+          name="description"
+          placeholder="Project Description"
+          value={formData.description}
+          onChange={handleChange}
+        />
+       {formData.tasks.map((task, index) => (
+  <TaskContainer key={index}>
+    <StyledInput
+      type="text"
+      name="taskName"
+      placeholder="Task Name"
+      value={task.taskName}
+      onChange={(e) => handleTaskChange(index, e)}
+    />
+    <StyledInput
+      type="text"
+      name="assigned"
+      placeholder="Assigned To"
+      value={task.assigned}
+      onChange={(e) => handleTaskChange(index, e)}
+    />
+    <StyledButton type="button" onClick={() => removeTask(index)}>
+      Remove Task
+    </StyledButton>
+  </TaskContainer>
+))}
+
+
+        <StyledButton type="button" onClick={addTask}>
+          Add Task
+        </StyledButton>
         <StyledButton type="submit">Create Project</StyledButton>
       </StyledForm>
     </FormContainer>
