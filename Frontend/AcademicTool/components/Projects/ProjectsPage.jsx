@@ -53,7 +53,7 @@ const ProjectsPage = () => {
         <DashboardContainer>
             {[
                 { title: 'Create Project', img: projectCreate, path: '/projects/createProject' },
-                { title: 'Vew Projects', img: projectView, path: '/projects/viewProjects' },
+                { title: 'View Projects', img: projectView, path: '/projects/viewProjects' },
                 // { title: 'Make a Plan', img: PlanImg, path: '/plan' },
 
             ].map((item) => (
