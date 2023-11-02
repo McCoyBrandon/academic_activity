@@ -1,3 +1,16 @@
+// Connections for the Front-End
+const express= require("express");
+var MongoClient=require("mongodb").MongoClient;
+var cors=require("cors");
+
+const multer= require('multer');
+const { default: mongoose } = require("mongoose");
+
+const app=express();
+app.use(cors());
+app.use(express.json());
+
+// MongoDB Connections Section
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://projectAdmin:KLUdywBgxnfbjZrP@atlascluster.ysh6jth.mongodb.net/?retryWrites=true&w=majority";
