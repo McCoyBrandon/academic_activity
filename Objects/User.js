@@ -27,6 +27,79 @@ const client = new MongoClient(uri, {
 // Creating a constant for direct reference to the Users collection in MongoDB
 const usersClient = client.db("Academic_Activity").collection("Users");
 
+//
+// User frontend call functions
+//
+/* 
+Function: Find a User based on their email and password.
+Return: User's MondoDB _id
+*/
+app.get('/api/user/getnotes', (request, response) => {
+    const userEmail = request.query.userEmail;
+    const userPassword = request.query.userPassword;
+    console.log(request.query.userEmail);
+    database.collection('Users').find({ "email":userEmail
+    , "password":userPassword   
+    }).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+  
+  /* 
+  Function: Create a User based on their email and password, and return the user.
+  Return: User's MondoDB _id
+  */
+  app.post('/api/user/addnotes', multer().none(), (request, response) => {
+      const userEmail = request.query.userEmail;
+      const userPassword = request.query.userPassword;
+      database.collection("Users").countDocuments({}, (error, numofDocs) => {
+          if (error) {
+              console.error("Error counting documents:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              const body = request.body;
+  
+              database.collection("Users").insertOne(body, (insertError) => {
+                  if (insertError) {
+                      console.error("Error adding note:", insertError);
+                      response.status(500).send("Internal Server Error");
+                  } else {
+                      console.log(body);
+                      response.json("Note added successfully");
+                  }
+              });
+          }
+      });
+  });
+  
+  /* 
+  Function: Delete a User based on their email and password.
+  */
+  app.delete('/api/user/deleteUser', (request, response) =>{
+      const userEmail = request.query.userEmail;
+      const userPassword = request.query.userPassword;
+  
+      database.collection("Users").deleteOne({"email": userEmail, "password": userPassword}, (error,result) =>
+      {
+          if (error) {
+              console.error('Error deleting data from MongoDB:',error);
+              response.status(500).send('Internal Server Error');
+          } else {
+              if (result.deletedCount === 0) {
+                  response.status(400).send('User not found');
+              } else {
+                  response.status(200).send('User credentials deleted');
+              }
+          }
+      });
+  });
+
 class User {
     #password;
 
@@ -64,6 +137,32 @@ class User {
     }
 }
 
+//
+// Section for Unit Testing build out.
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// Saving these functions for possible use later, but may depreciate.
+//
 /*
 Function: Create a user in the MongoDB database
 Returns: True/False if successful

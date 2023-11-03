@@ -24,6 +24,73 @@ const client = new MongoClient(uri, {
   }
 });
 
+//
+// Projects call functions
+//
+/* 
+Function: Create a project based on a provided name, and return the id.
+Return: Project's MondoDB _id
+*/
+app.post('/api/user/createProject', multer().none(), (request, response) => {
+    database.collection("Projects").countDocuments({}, (error, numofDocs) => {
+        if (error) {
+            console.error("Error counting documents:", error);
+            response.status(500).send("Internal Server Error");
+        } else {
+            const body = request.body;
+
+            database.collection("Projects").insertOne(body, (insertError) => {
+                if (insertError) {
+                    console.error("Error adding note:", insertError);
+                    response.status(500).send("Internal Server Error");
+                } else {
+                    console.log(body);
+                    response.json("Note added successfully");
+                }
+            });
+        }
+    });
+});
+
+/* 
+Function: Get a project list based on a provided value, and return the id.
+Return: Project's MondoDB _id
+*/
+app.get('/api/user/viewProject', (request, response) => {
+    const userId = request.query.userId;
+    console.log(request.query.userId);
+    database.collection('Projects').find({}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+ 
+/* 
+Function: Delete a project based on a given projectId
+*/
+app.delete('/api/user/deleteProject', (request, response) =>{
+    const projectID = request.query.projectID;
+    console.log(request.query.projectID);
+    database.collection("Projects").deleteOne(projectID, (error,result) =>
+    {
+        if (error) {
+            console.error('Error deleting data from MongoDB:',error);
+            response.status(500).send('Internal Server Error');
+        } else {
+            if (result.deletedCount === 0) {
+                response.status(400).send('Project not found');
+            } else {
+                response.status(200).send('Project deleted');
+            }
+        }
+    });
+});
+
 // Creating a constant for direct reference to the Users collection in MongoDB
 const projectsClient = client.db("Academic_Activity").collection("Projects");
 
@@ -63,6 +130,32 @@ class Project {
     }
 
 }
+
+//
+// Section for Unit Testing build out.
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+// Saving these functions for possible use later, but may depreciate.
+//
 
 /*
 Function: Create a new project without a task list in the MongoDB database

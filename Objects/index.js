@@ -30,8 +30,11 @@ app.listen(5038,()=>{
     })
 })
 
+//
+// User frontend call functions
+//
 /* 
-Function: Find a User based on their email and password, and return the user.
+Function: Find a User based on their email and password.
 Return: User's MondoDB _id
 */
 app.get('/api/user/getnotes', (request, response) => {
@@ -78,13 +81,37 @@ app.post('/api/user/addnotes', multer().none(), (request, response) => {
     });
 });
 
+/* 
+Function: Delete a User based on their email and password.
+*/
+app.delete('/api/user/deleteUser', (request, response) =>{
+    const userEmail = request.query.userEmail;
+    const userPassword = request.query.userPassword;
 
-// Sprint 2
+    database.collection("Users").deleteOne({"email": userEmail, "password": userPassword}, (error,result) =>
+    {
+        if (error) {
+            console.error('Error deleting data from MongoDB:',error);
+            response.status(500).send('Internal Server Error');
+        } else {
+            if (result.deletedCount === 0) {
+                response.status(400).send('User not found');
+            } else {
+                response.status(200).send('User credentials deleted');
+            }
+        }
+    });
+});
+
+
+//
+// Projects call functions
+//
 /* 
 Function: Create a project based on a provided name, and return the id.
 Return: Project's MondoDB _id
 */
-app.post('/api/user/createProjects', multer().none(), (request, response) => {
+app.post('/api/user/createProject', multer().none(), (request, response) => {
     database.collection("Projects").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
@@ -106,12 +133,12 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
 });
 
 /* 
-Function: Get a project based on a provided name, and return the id.
+Function: Get a project list based on a provided value, and return the id.
 Return: Project's MondoDB _id
 */
-app.get('/api/user/viewAllProjects', (request, response) => {
+app.get('/api/user/viewProject', (request, response) => {
     const userId = request.query.userId;
-    //console.log(request.query.userId);
+    console.log(request.query.userId);
     database.collection('Projects').find({}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
@@ -122,20 +149,45 @@ app.get('/api/user/viewAllProjects', (request, response) => {
       }
     });
   });
-  
-  /* 
-Function: Create a task based on a provided name, and return the id.
+ 
+/* 
+Function: Delete a project based on a given projectId
+*/
+app.delete('/api/user/deleteProject', (request, response) =>{
+    const projectID = request.query.projectID;
+    console.log(request.query.projectID);
+    database.collection("Projects").deleteOne(projectID, (error,result) =>
+    {
+        if (error) {
+            console.error('Error deleting data from MongoDB:',error);
+            response.status(500).send('Internal Server Error');
+        } else {
+            if (result.deletedCount === 0) {
+                response.status(400).send('Project not found');
+            } else {
+                response.status(200).send('Project deleted');
+            }
+        }
+    });
+});
+
+//
+// Task frontend call functions
+//
+
+/* 
+Function: Get a task based on a provided name, and return the id.
 Return: Task's MondoDB _id
 */
-app.post('/api/user/createProjects', multer().none(), (request, response) => {
-    database.collection("Tasks").countDocuments({}, (error, numofDocs) => {
+app.post('/api/user/createTask', multer().none(), (request, response) => {
+    database.collection("Projects").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
             response.status(500).send("Internal Server Error");
         } else {
             const body = request.body;
 
-            database.collection("Tasks").insertOne(body, (insertError) => {
+            database.collection("Projects").insertOne(body, (insertError) => {
                 if (insertError) {
                     console.error("Error adding note:", insertError);
                     response.status(500).send("Internal Server Error");
@@ -149,12 +201,13 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
 });
 
 /* 
-Function: Get a task based on a provided name, and return the id.
-Return: Task's MondoDB _id
+Function: Get a task list based on a provided value, and return the array of Ids.
+Return: Array of tasks
 */
-app.get('/api/user/viewAllProjects', (request, response) => {
+
+app.get('/api/user/viewTask', (request, response) => {
     const userId = request.query.userId;
-    //console.log(request.query.userId);
+    console.log(request.query.userId);
     database.collection('Tasks').find({}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
@@ -166,3 +219,24 @@ app.get('/api/user/viewAllProjects', (request, response) => {
     });
   });
   
+ 
+/* 
+Function: Delete a task based on a given taskId
+*/
+  app.delete('/api/user/deleteTask', (request, response) =>{
+    const taskID = request.query.taskID;
+    console.log(request.query.taskID);
+    database.collection("Tasks").deleteOne(taskID, (error,result) =>
+    {
+        if (error) {
+            console.error('Error deleting data from MongoDB:',error);
+            response.status(500).send('Internal Server Error');
+        } else {
+            if (result.deletedCount === 0) {
+                response.status(400).send('Project not found');
+            } else {
+                response.status(200).send('Project deleted');
+            }
+        }
+    });
+});
