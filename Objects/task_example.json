@@ -1,0 +1,9 @@
+{
+    "_ID": "*MongoDB_ID*",
+    "ownerID": "*MongoDB_ID for the user owner",
+    "Collaborators": "List of user IDs of collaborators", // Object not yet built out.
+    "name": "Front End: Sign in page",
+    "startDate": "10/1/2023",
+    "completeByDate":"11/30/2023",
+    "description": "Create a static login page"
+}
