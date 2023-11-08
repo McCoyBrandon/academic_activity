@@ -1,5 +1,8 @@
 {
-    "_ID": "*MongoDB_ID*",
+    /* 
+    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when retrieving.
+    */
+    //"_ID": "*MongoDB_ID*",
     "ownerID": "*MongoDB_ID for the user owner",
     "Collaborators": "List of user IDs of collaborators", // Object not yet built out.
     "name": "Front End: Sign in page",

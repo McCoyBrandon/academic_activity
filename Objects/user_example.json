@@ -1,5 +1,8 @@
 {
-    "_ID": "MongoDB_ID",
+    /* 
+    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when retrieving.
+    */
+    //"_ID": "MongoDB_ID",
     "userID": "mccoybs",
     "email": "brandon.mccoy@slu.edu",
     "password": "passwordispassword",    
