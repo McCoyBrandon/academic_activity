@@ -100,3 +100,91 @@ app.get('/api/user/viewAllProjects', (request, response) => {
     });
   });
   
+// members in the singup
+  app.get('/api/allUsers', (request, response) => {
+    
+    database.collection('user_credentials').find({}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  app.post('/api/user/projectMembers', multer().none(), (request, response) => {
+    database.collection("projectMembers").countDocuments({}, (error, numofDocs) => {
+        if (error) {
+            console.error("Error counting documents:", error);
+            response.status(500).send("Internal Server Error");
+        } else {
+            const body = request.body;
+
+            database.collection("projectMembers").insertOne(body, (insertError) => {
+                if (insertError) {
+                    console.error("Error adding note:", insertError);
+                    response.status(500).send("Internal Server Error");
+                } else {
+                    console.log(body);
+                    response.json("Note added successfully");
+                }
+            });
+        }
+    });
+});
+
+// post to create or add alltasks
+  app.post('/api/user/addTasks', multer().none(), (request, response) => {
+    database.collection("ProjectTasks").countDocuments({}, (error, numofDocs) => {
+        if (error) {
+            console.error("Error counting documents:", error);
+            response.status(500).send("Internal Server Error");
+        } else {
+            const body = request.body;
+
+            database.collection("ProjectTasks").insertOne(body, (insertError) => {
+                if (insertError) {
+                    console.error("Error adding note:", insertError);
+                    response.status(500).send("Internal Server Error");
+                } else {
+                    console.log(body);
+                    response.json("Note added successfully");
+                }
+            });
+        }
+    });
+});
+
+//this is get viewall tasks
+app.get('/api/user/viewAllTasks', (request, response) => {
+    const userId = request.query.userId;
+    //console.log(request.query.userId);
+    database.collection('UserProjects').find({}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  app.delete('/api/user/userDeleteTask', (request, response) => {
+    const task = request.query.task;
+  
+    database.collection('ProjectTasks').deleteOne({}, (error, result) => {
+      if (error) {
+        console.error('Error deleting data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        if (result.deletedCount === 0) {
+          response.status(404).send('User not found');
+        } else {
+          response.status(200).send('Task deleted');
+        }
+      }
+    });
+  });
