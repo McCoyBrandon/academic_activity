@@ -34,7 +34,7 @@ const usersClient = client.db("Academic_Activity").collection("Users");
 Function: Find a User based on their email and password.
 Return: User's MondoDB _id
 */
-app.get('/api/user/getnotes', (request, response) => {
+app.get('/api/user/getUserByEmail', (request, response) => {
     const userEmail = request.query.userEmail;
     const userPassword = request.query.userPassword;
     console.log(request.query.userEmail);
@@ -50,12 +50,30 @@ app.get('/api/user/getnotes', (request, response) => {
       }
     });
   });
+
+  /* 
+Function: Get a User based on a provided ID.
+Return: Project's MondoDB _id
+*/
+app.get('/api/user/viewUser', (request, response) => {
+    const userId = request.query.userId;
+    console.log(request.query.userId);
+    database.collection('Users').find({"_ID": userId}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
   
   /* 
   Function: Create a User based on their email and password, and return the user.
   Return: User's MondoDB _id
   */
-  app.post('/api/user/addnotes', multer().none(), (request, response) => {
+  app.post('/api/user/addUser', multer().none(), (request, response) => {
       const userEmail = request.query.userEmail;
       const userPassword = request.query.userPassword;
       database.collection("Users").countDocuments({}, (error, numofDocs) => {

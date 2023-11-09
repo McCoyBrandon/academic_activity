@@ -33,14 +33,14 @@ Function: Get a task based on a provided name, and return the id.
 Return: Task's MondoDB _id
 */
 app.post('/api/user/createTask', multer().none(), (request, response) => {
-    database.collection("Projects").countDocuments({}, (error, numofDocs) => {
+    database.collection("Tasks").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
             response.status(500).send("Internal Server Error");
         } else {
             const body = request.body;
 
-            database.collection("Projects").insertOne(body, (insertError) => {
+            database.collection("Tasks").insertOne(body, (insertError) => {
                 if (insertError) {
                     console.error("Error adding note:", insertError);
                     response.status(500).send("Internal Server Error");
@@ -59,9 +59,9 @@ Return: Array of tasks
 */
 
 app.get('/api/user/viewTask', (request, response) => {
-    const userId = request.query.userId;
-    console.log(request.query.userId);
-    database.collection('Tasks').find({}).toArray((error, result) => {
+    const taskId = request.query.taskId;
+    console.log(request.query.taskId);
+    database.collection('Tasks').find({"_ID": taskId}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');

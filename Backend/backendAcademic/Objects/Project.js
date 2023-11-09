@@ -57,9 +57,9 @@ Function: Get a project list based on a provided value, and return the id.
 Return: Project's MondoDB _id
 */
 app.get('/api/user/viewProject', (request, response) => {
-    const userId = request.query.userId;
-    console.log(request.query.userId);
-    database.collection('Projects').find({}).toArray((error, result) => {
+    const projectId = request.query.projectId;
+    console.log(request.query.projectId);
+    database.collection('Projects').find({"_ID": projectId}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
