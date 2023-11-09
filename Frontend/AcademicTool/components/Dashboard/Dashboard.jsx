@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 import ProjectsImg from '../../components/Assets/project.jpeg';
-import CoursesImg from '../../components/Assets/course.png';
+import CoursesImg from '../../components/Assets/calender.avif';
 import PlanImg from '../../components/Assets/course1.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,8 +54,8 @@ const Dashboard = () => {
         <DashboardContainer>
             {[
                 { title: 'Projects', img: ProjectsImg, path: '/projects' },
-                { title: 'Courses', img: CoursesImg, path: '/courses' },
-                { title: 'Make a Plan', img: PlanImg, path: '/plan' },
+                { title: 'Calender', img: CoursesImg, path: '/calender' },
+                // { title: 'Make a Plan', img: PlanImg, path: '/plan' },
 
             ].map((item) => (
                 <StyledCard key={item.title}>

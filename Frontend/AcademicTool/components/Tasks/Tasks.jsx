@@ -1,19 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
-import projectView from '../../components/Assets/createMyProj.webp';
-import projectCreate from '../../components/Assets/viewMyProj.png';
+import projectView from '../../components/Assets/viewMyTask.png';
+import projectCreate from '../../components/Assets/createTask.avif';
 import { useNavigate } from 'react-router-dom';
-import Button from '@mui/material/Button'; // Import the Button component
+import { Button } from '@mui/material';
 
 const DashboardContainer = styled('div')({
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-evenly',
-    minHeight: '100vh',
+    // minHeight: '100vh',
     alignItems: 'center',
 });
 
@@ -52,29 +52,42 @@ const ImageStyle = styled('img')({
     borderRadius: '20px 20px 0 0',
 });
 
-const DashboardButtonContainer = styled('div')({
-    display: 'flex',
-    justifyContent: 'flex-start',
-    padding: '20px',
-    width: '100%',
-});
+const Tasks = () => {
 
-const ProjectsPage = () => {
-
+    const [projectDetails, setProjectDetails] = useState({});
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const storedProjectDetails = localStorage.getItem('projectDetails');
+        if (storedProjectDetails) {
+            setProjectDetails(JSON.parse(storedProjectDetails));
+        }
+    }, []);
     return (
         <ProjectsPageDiv>
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={() => navigate('/dashboard')} // Replace '/dashboard' with the actual path to your dashboard
-            >
-                Go to Dashboard
-            </Button>
+            <div style={{ display: "flex",justifyContent:"space-between" }}>
+                <div>
+                    {projectDetails.projectName && ( // Conditional rendering to display this section only if project name exists
+                        <div>
+                            <h2>Project Name: {projectDetails.projectName}</h2>
+                            <p>Description: {projectDetails.description}</p>
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate('/projects/viewProjects')} // Replace '/dashboard' with the actual path to your dashboard
+                    >
+                        Go to Projects
+                    </Button>
+                </div>
+            </div>
             <DashboardContainer>
                 {[
-                    { title: 'Create Project', img: projectCreate, path: '/projects/createProject' },
-                    { title: 'View Projects', img: projectView, path: '/projects/viewProjects' },
+                    { title: 'Create New Task', img: projectCreate, path: '/projects/viewProjects/tasks/create' },
+                    { title: 'Vew My Tasks', img: projectView, path: '/projects/viewProjects/tasks/view' },
                     // { title: 'Make a Plan', img: PlanImg, path: '/plan' },
 
                 ].map((item) => (
@@ -96,4 +109,4 @@ const ProjectsPage = () => {
     );
 };
 
-export default ProjectsPage;
+export default Tasks;
