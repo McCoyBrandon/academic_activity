@@ -29,23 +29,30 @@ const LoginScreen = () => {
     };
   };
 
-  // get request for get the user Id
+  
   const fetchData = async () => {
+    console.log("formdata",formData)
     setLoading(true);
     try {
-      const {data:response} = await axios.get(`http://localhost:5038/api/user/getnotes?userEmail=${userEmail}&userPassword=${userPassword}`).then(function (response) {
-      console.log(response);});
+      const {data:response} = await axios.get(`http://localhost:5038/api/user/getnotes?userEmail=${formData?.email}&userPassword=${formData?.password}`).then(function (response) {
+      console.log("test",response);
+
       setData(response);
       console.log(data,"11"); 
       
        // Use response.data to log the data
-      if(response.data !== 0 && response.data> 0)
+      if(response.data !== 0 && response.data?.length> 0)
       {
-        navigateTo("/AcademicMainScreen");
+        localStorage.setItem("email",formData?.email);
+        localStorage.setItem("password",formData?.password)
+        navigateTo("/dashboard");
        
       } else{
        // alert('email and password are invalid!');
       }
+
+    });
+     
 
      
     } catch (error) {
@@ -75,7 +82,7 @@ const LoginScreen = () => {
     <div className='container'>
       <div className='header'>
         <h1>Login</h1>
-        <div className='underline'></div>
+        {/* <div className='underline'></div> */}
       </div>
       <div className='inputs'>
         <div className='input'>

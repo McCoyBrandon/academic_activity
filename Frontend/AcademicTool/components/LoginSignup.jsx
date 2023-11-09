@@ -37,7 +37,6 @@ const LoginSignup = () => {
     });
   };
 
-  // console the signin data
   const handleFormSubmit = () => {
     {
       const signupData = {
@@ -53,7 +52,7 @@ const LoginSignup = () => {
     <div className='container'>
       <div className='header'>
         <h1> Signup</h1>
-        <div className='underline'></div>
+        {/* <div className='underline'></div> */}
       </div>
       <div className='inputs'>
         
