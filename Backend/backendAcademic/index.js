@@ -1,24 +1,41 @@
-const express= require("express");
-var MongoClient=require("mongodb").MongoClient;
-var cors=require("cors");
+const express = require("express");
+const MongoClient = require("mongodb").MongoClient;
+const cors = require("cors");
 
-const multer= require('multer');
+const multer = require('multer');
 const { default: mongoose } = require("mongoose");
 
-const app=express();
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-var CONNECTION_STRING="mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
-var DATABASESNAME="user-academic-activity";
+var CONNECTION_STRING = "mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
+var DATABASESNAME = "user-academic-activity";
 var database;
 
-app.listen(5038,()=>{
-    MongoClient.connect((CONNECTION_STRING),(error,client)=>{
-        database=client.db(DATABASESNAME);
-        console.log("succeffuly connected");
-    })
-})
+// Move server initialization logic outside of app.listen
+MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
+  if (error) {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1);
+  } else {
+    database = client.db(DATABASESNAME);
+    console.log("Successfully connected to MongoDB");
+
+    // Start the server
+    server = app.listen(5038, () => {
+      console.log("Server is running on port 5038");
+    });
+
+    // Close the MongoDB connection when the server is closed
+    server.on('close', () => {
+      console.log("Closing MongoDB connection");
+      client.close();
+    });
+  }
+});
+
+// Rest of your code remains the same...
 
 // this get request is for login
 app.get('/api/user/getnotes', (request, response) => {
@@ -78,7 +95,7 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
                     response.status(500).send("Internal Server Error");
                 } else {
                     console.log(body);
-                    response.json("Note added successfully");
+                    response.json("project created successfully");
                 }
             });
         }
@@ -87,7 +104,7 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
 
 //this get request is for viewing the projects
 app.get('/api/user/viewAllProjects', (request, response) => {
-    const userId = request.query.userId;
+    
     //console.log(request.query.userId);
     database.collection('UserProjects').find({}).toArray((error, result) => {
       if (error) {
@@ -128,7 +145,7 @@ app.get('/api/user/viewAllProjects', (request, response) => {
                     response.status(500).send("Internal Server Error");
                 } else {
                     console.log(body);
-                    response.json("Note added successfully");
+                    response.json("add member to project in separate collection successfully");
                 }
             });
         }
@@ -159,7 +176,7 @@ app.get('/api/user/viewAllProjects', (request, response) => {
 
 //this is get viewall tasks
 app.get('/api/user/viewAllTasks', (request, response) => {
-    const userId = request.query.userId;
+   
     //console.log(request.query.userId);
     database.collection('UserProjects').find({}).toArray((error, result) => {
       if (error) {
@@ -173,7 +190,7 @@ app.get('/api/user/viewAllTasks', (request, response) => {
   });
 
   app.delete('/api/user/userDeleteTask', (request, response) => {
-    const task = request.query.task;
+    const taskId = request.query.task;
   
     database.collection('ProjectTasks').deleteOne({}, (error, result) => {
       if (error) {
@@ -188,3 +205,9 @@ app.get('/api/user/viewAllTasks', (request, response) => {
       }
     });
   });
+
+
+
+
+
+  module.exports = app;
