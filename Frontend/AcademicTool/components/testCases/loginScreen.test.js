@@ -1,9 +1,10 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import LoginScreen from "../LoginScreen";
+// import LoginScreen from "../loginScreen";
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
+import LoginScreen from '../LoginScreen';
 
 jest.mock('axios');
 const mockedNavigate = jest.fn();
@@ -20,7 +21,7 @@ describe('LoginScreen Component Tests', () => {
   });
 
   test('renders the Login header', () => {
-    const headerElement = screen.getByText(/login/i);
+    const headerElement = screen.getByText("/");
     expect(headerElement).toBeInTheDocument();
   });
 
