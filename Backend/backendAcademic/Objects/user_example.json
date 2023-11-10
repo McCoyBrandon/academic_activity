@@ -7,6 +7,6 @@
     "userName": "Username of the user profile for display",
     "email": "brandon.mccoy@slu.edu",
     "password": "passwordispassword",    
-    "projectList": {},
-    "taskList": {}
+    "projectList": [],
+    "taskList": []
 }

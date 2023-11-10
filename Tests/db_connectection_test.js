@@ -3,6 +3,7 @@ const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://projectAdmin:KLUdywBgxnfbjZrP@atlascluster.ysh6jth.mongodb.net/?retryWrites=true&w=majority";
 const db = 'Academic_Activity';
 
+// Testing variables
 const assert = require('assert');
 
 describe('MongoDb Connection test', () => {
