@@ -4,8 +4,11 @@
     */
     //"_ID": "*MongoDB_ID*",
     "ownerID": "*MongoDB_ID for the user owner",
-    "Collaborators": "List of user IDs of collaborators", // Object not yet built out.
-    "Description": "Group project for CSCI 5030. Please refer to the README file.",
+    "members": [
+            { "memberID": "_ID of user"},
+            {"userID": "User name for display"}
+        ], //"List of user IDs of members"
+    "description": "Group project for CSCI 5030. Please refer to the README file.",
     "name": "CSCI Group Project: Academic Activity",
     "taskList": {}
 }

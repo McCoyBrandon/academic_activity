@@ -71,6 +71,42 @@ app.get('/api/user/viewProject', (request, response) => {
   });
  
 /* 
+Function: Get a project list based on a userID, and return the array of ids.
+Return: Project's MondoDB _id
+*/
+app.get('/api/user/viewProjectsByUser', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Projects').find({"ownerID": userID}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+/* 
+Function: Get a project list based on a provided value, and return the id.
+Return: Project's MondoDB _id
+*/
+app.get('/api/user/viewProjectsByMember', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Projects').find({"members": {"memberID": userID}}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+});
+
+/* 
 Function: Delete a project based on a given projectId
 */
 app.delete('/api/user/deleteProject', (request, response) =>{
