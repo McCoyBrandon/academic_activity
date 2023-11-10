@@ -1,13 +1,13 @@
 {
     /* 
-    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when retrieving.
+    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when using get or delete.
     */
     //"_ID": "*MongoDB_ID*",
     "ownerID": "*MongoDB_ID for the user owner",
     "members": [
             { "memberID": "_ID of user"},
-            {"userID": "User name for display"}
-        ], //"List of user IDs of members"
+            { "userName": "User name for display"}
+        ], 
     "description": "Group project for CSCI 5030. Please refer to the README file.",
     "name": "CSCI Group Project: Academic Activity",
     "taskList": {}

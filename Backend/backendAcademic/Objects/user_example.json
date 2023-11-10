@@ -3,7 +3,8 @@
     Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when retrieving.
     */
     //"_ID": "MongoDB_ID",
-    "userID": "mccoybs",
+    "userID": "MongoDB _ID of user",
+    "userName": "Username of the user profile for display",
     "email": "brandon.mccoy@slu.edu",
     "password": "passwordispassword",    
     "projectList": {},

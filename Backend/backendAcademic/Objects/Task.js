@@ -71,8 +71,44 @@ app.get('/api/user/viewTask', (request, response) => {
       }
     });
   });
+
+/* 
+Function: Get a project list based on a userID, and return the array of ids.
+Return: Task's in a MondoDB _id list
+*/
+app.get('/api/user/viewTasksByUser', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Tasks').find({"ownerID": userID}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
   
- 
+/* 
+Function: Get a tasks list based on a userID, and return the array of ids.
+Return: Task's in a MondoDB _id list
+*/
+app.get('/api/user/viewTasksByMember', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Tasks').find({"members": {"memberID": userID}}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+  
+
 /* 
 Function: Delete a task based on a given taskId
 */

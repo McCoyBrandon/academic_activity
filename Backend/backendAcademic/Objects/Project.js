@@ -72,7 +72,7 @@ app.get('/api/user/viewProject', (request, response) => {
  
 /* 
 Function: Get a project list based on a userID, and return the array of ids.
-Return: Project's MondoDB _id
+Return: Projects's in a MondoDB _id list
 */
 app.get('/api/user/viewProjectsByUser', (request, response) => {
     const userID = request.query.userID;
@@ -90,7 +90,7 @@ app.get('/api/user/viewProjectsByUser', (request, response) => {
 
 /* 
 Function: Get a project list based on a provided value, and return the id.
-Return: Project's MondoDB _id
+Return: Projects's in a MondoDB _id list
 */
 app.get('/api/user/viewProjectsByMember', (request, response) => {
     const userID = request.query.userID;
