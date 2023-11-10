@@ -3,6 +3,7 @@
     Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when using get or delete.
     */
     //"_ID": "*MongoDB_ID*",
+    "projectName": "CSCI5003 Group Project",
     "ownerID": "*MongoDB_ID for the user owner",
     "members": [
             { "memberID": "_ID of user"},
