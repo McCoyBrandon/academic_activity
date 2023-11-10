@@ -1,3 +1,10 @@
+/*
+This file is being used as a central index of object API's for MongoDB.
+All API's are created on their respective object files and then added here, but has grown and intended to move to the object files.
+Will need to review after sprint if this is still being used.
+*/
+
+
 const express= require("express");
 var MongoClient=require("mongodb").MongoClient;
 var cors=require("cors");
@@ -168,6 +175,42 @@ app.get('/api/user/viewProject', (request, response) => {
       }
     });
   });
+
+/* 
+Function: Get a project list based on a userID, and return the array of ids.
+Return: Projects's in a MondoDB _id list
+*/
+app.get('/api/user/viewProjectsByUser', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Projects').find({"ownerID": userID}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+/* 
+Function: Get a project list based on a provided value, and return the id.
+Return: Projects's in a MondoDB _id list
+*/
+app.get('/api/user/viewProjectsByMember', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Projects').find({"members": {"memberID": userID}}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+});
  
 /* 
 Function: Delete a project based on a given projectId
@@ -218,6 +261,42 @@ app.post('/api/user/createTask', multer().none(), (request, response) => {
         }
     });
 });
+
+/* 
+Function: Get a project list based on a userID, and return the array of ids.
+Return: Task's in a MondoDB _id list
+*/
+app.get('/api/user/viewTasksByUser', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Tasks').find({"ownerID": userID}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+  
+/* 
+Function: Get a tasks list based on a userID, and return the array of ids.
+Return: Task's in a MondoDB _id list
+*/
+app.get('/api/user/viewTasksByMember', (request, response) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('Tasks').find({"members": {"memberID": userID}}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
 
 /* 
 Function: Get a task list based on a provided value, and return the array of Ids.
