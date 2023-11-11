@@ -30,6 +30,7 @@ app.listen(5038,()=>{
     })
 })
 
+
 //
 // User frontend call functions
 //
@@ -54,10 +55,12 @@ app.get('/api/user/getnotes', (request, response) => {
   });
 });
 
+
 /* 
 Function: Create a User based on their email and password, and return the user.
 Return: User's MondoDB _id
 */
+
 app.post('/api/user/addnotes', multer().none(), (request, response) => {
     const userEmail = request.query.userEmail;
     const userPassword = request.query.userPassword;
@@ -103,16 +106,10 @@ app.delete('/api/user/deleteUser', (request, response) =>{
     });
 });
 
-
-//
-// Projects call functions
-//
-/* 
-Function: Create a project based on a provided name, and return the id.
-Return: Project's MondoDB _id
-*/
-app.post('/api/user/createProject', multer().none(), (request, response) => {
-    database.collection("Projects").countDocuments({}, (error, numofDocs) => {
+//splint 2
+// this post request create and add project
+app.post('/api/user/createProjects', multer().none(), (request, response) => {
+    database.collection("UserProjects").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
             response.status(500).send("Internal Server Error");
@@ -132,11 +129,9 @@ app.post('/api/user/createProject', multer().none(), (request, response) => {
     });
 });
 
-/* 
-Function: Get a project list based on a provided value, and return the id.
-Return: Project's MondoDB _id
-*/
-app.get('/api/user/viewProject', (request, response) => {
+
+//this get request is for viewing the projects
+app.get('/api/user/viewAllProjects', (request, response) => {
     const userId = request.query.userId;
     console.log(request.query.userId);
     database.collection('Projects').find({}).toArray((error, result) => {
