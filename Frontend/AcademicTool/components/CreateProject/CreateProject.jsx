@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
@@ -65,22 +65,33 @@ const StyledButton = styled('button')({
   },
 });
 
-const TaskContainer = styled('div')({
+const StyledSelect = styled('select')({
+  padding: '10px',
+  borderRadius: '5px',
+  border: 'none',
+  outline: 'none',
+  background: '#FFFFFF',
+  color: '#000000',
+  marginBottom: '10px',
+});
+
+const MemberSelectionContainer = styled('div')({
   display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-  marginBottom: '15px',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  marginBottom: '10px',
 });
 
-const RemoveButton = styled(StyledButton)({
-  backgroundColor: '#FF6347', // Example: Tomato red for remove button
-  color: '#FFFFFF',
-  '&:hover': {
-    backgroundColor: '#FF4500', // Darker red on hover
-  },
+const InlineButton = styled(StyledButton)({
+  marginLeft: '10px',
+  flexGrow: 0,
 });
 
-
+const membersList = [
+  { id: 1, name: 'Vineetha' },
+  { id: 2, name: 'Harish' },
+  { id: 3, name: 'Brandon' },
+];
 
 const CreateProjectForm = () => {
 
@@ -88,82 +99,61 @@ const CreateProjectForm = () => {
 
 
   const [formData, setFormData] = useState({
-    title: '',
-    courseName: '',
-    startTime: '',
-    endTime: '',
+    projectName: '',
     description: '',
-    tasks: [{ taskName: '', assigned: '' }],
+    members: [],
   });
 
-  const handleTaskChange = (index, event) => {
-    const updatedTasks = formData.tasks.map((task, i) => {
-      if (index === i) {
-        return { ...task, [event.target.name]: event.target.value };
-      }
-      return task;
-    });
-    setFormData({ ...formData, tasks: updatedTasks });
-  };
-  const addTask = () => {
-    setFormData({
-      ...formData,
-      tasks: [...formData.tasks, { taskName: '', assigned: '' }],
-    });
-  };
 
-  const removeTask = (index) => {
-    const updatedTasks = formData.tasks.filter((_, i) => i !== index);
-    setFormData({ ...formData, tasks: updatedTasks });
-  };
+  const [memberIds, setMemberIds] = useState(['']);
 
-  
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5038/api/user/createProjects', formData);
-      // Handle successful response
-      history('/projects/viewProjects'); // Navigate to viewprojects page
+      const response = await axios.post('http://localhost:5038/api/user/createProject', {
+        ...formData,
+        members: memberIds.map(id => membersList.find(member => member.id === id)),
+      });
+
+      history('/projects/viewProjects');
     } catch (error) {
-      // Handle error
+      console.error('Failed to create project:', error);
     }
   };
 
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
+
+  const handleMemberChange = (index) => (event) => {
+    const value = Number(event.target.value);
+    setMemberIds((currentMemberIds) =>
+      currentMemberIds.map((id, idx) => (idx === index ? value : id))
+    );
+  };
+
+  // useEffect(()=>{
+  //   setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
+
+  // },[])
+
+  const handleAddMember = () => {
+    setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
+  };
+
   return (
     <FormContainer>
       <FormTitle>Create New Project</FormTitle>
       <StyledForm onSubmit={handleSubmit}>
+
         <StyledInput
           type="text"
-          name="title"
-          value={formData.title}
+          name="projectName"
+          value={formData.projectName}
           onChange={handleChange}
-          placeholder="Title"
+          placeholder="Project Name"
         />
-        <StyledInput
-          type="text"
-          name="courseName"
-          value={formData.courseName}
-          onChange={handleChange}
-          placeholder="Course Name"
-        />
-        <StyledInput
-          type="datetime-local"
-          name="startTime"
-          value={formData.startTime}
-          onChange={handleChange}
-          placeholder='Start Time'
-        />
-        <StyledInput
-          type="datetime-local"
-          name="endTime"
-          value={formData.endTime}
-          onChange={handleChange}
-          placeholder='End Time'
-        />
+
         <StyledInput
           type="text"
           name="description"
@@ -171,32 +161,28 @@ const CreateProjectForm = () => {
           value={formData.description}
           onChange={handleChange}
         />
-       {formData.tasks.map((task, index) => (
-  <TaskContainer key={index}>
-    <StyledInput
-      type="text"
-      name="taskName"
-      placeholder="Task Name"
-      value={task.taskName}
-      onChange={(e) => handleTaskChange(index, e)}
-    />
-    <StyledInput
-      type="text"
-      name="assigned"
-      placeholder="Assigned To"
-      value={task.assigned}
-      onChange={(e) => handleTaskChange(index, e)}
-    />
-    <StyledButton type="button" onClick={() => removeTask(index)}>
-      Remove Task
-    </StyledButton>
-  </TaskContainer>
-))}
 
+        {memberIds.map((memberId, index) => (
+          <MemberSelectionContainer key={index}>
+            <StyledSelect
+              value={memberId || ''}
+              onChange={handleMemberChange(index)}
+            >
+              <option value="">Select Member</option>
+              {membersList.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name}
+                </option>
+              ))}
+            </StyledSelect>
+            {index === memberIds.length - 1 && (
+              <InlineButton type="button" onClick={handleAddMember}>
+                Add Member
+              </InlineButton>
+            )}
+          </MemberSelectionContainer>
+        ))}
 
-        <StyledButton type="button" onClick={addTask}>
-          Add Task
-        </StyledButton>
         <StyledButton type="submit">Create Project</StyledButton>
       </StyledForm>
     </FormContainer>
