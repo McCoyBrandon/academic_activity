@@ -3,24 +3,26 @@
 version: 2.1
 
 orbs:
-  jira: circleci/jira@2.1.0
-  newman: postman/newman@1.0.0
-  node: circleci/node@5.1.0
-  docker: circleci/docker@2.4.0
+  #jira: circleci/jira@2.1.0
+  #newman: postman/newman@1.0.0
+  #node: circleci/node@5.1.0
+  #docker: circleci/docker@2.4.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
   # Setting up MongoDB connection test. 
-  db_connection_test:
+  db_tests:
     docker:
       - image: cimg/base:stable
     steps:
       - checkout
-      - run:
-        name: "Test MongoDB Connection Test"
-        command: npm test -- tests/
+      - run: "npm test -- tests/"
+        #name: "Test MongoDB Connection and Objects"
+        #command: "npm test -- tests/"
 
+
+  # This was included as an example. Left for easy references and as an example.
   say-hello:
     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/configuration-reference/#executor-job
@@ -37,9 +39,9 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  startup-workflow:
     jobs:
-      - db_connection_test
+      - db_tests
       - say-hello
 
 

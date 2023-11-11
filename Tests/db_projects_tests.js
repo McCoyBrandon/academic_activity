@@ -14,7 +14,7 @@ describe('CRUD operations tests for the Projects object', () => {
 
     before(async () => {
         client = await MongoClient.connect(url, { useUnifiedTopology: true});
-        db = client.db(dbdb_name);
+        db = client.db(dbName);
         collection = db.collection(collection);
     });
 

@@ -1,21 +1,24 @@
 // MongoDB Connections Section
-const MongoClient = require('mongodb').MongoClient;
+const MongoClient = require('mongodb');
 const url = "mongodb+srv://projectAdmin:KLUdywBgxnfbjZrP@atlascluster.ysh6jth.mongodb.net/?retryWrites=true&w=majority";
-const db = 'Academic_Activity';
-
-// Testing variables
-const assert = require('assert');
+const dbName = 'Academic_Activity';
 
 describe('MongoDb Connection test', () => {
-    it('connect to MongoDB', (done) => {
-        MongoClient.connect(url, function(err, client) {
-            assert.equal(null, err);
-            console.log("Connected successfully to MongoDB");
+    let connection;
+    let db;
 
-            const db = client.db(db);
+    beforeAll(async() => {
+        connection = await MongoClient.connect(url, {useNewUrlParser: true, useUnifiedTopology,});
+        db = await connection.db(dbName);
+    });
 
-            client.close();
-            done();
-        });
+    afterall(async() => {
+        await connection.close();
+    });
+
+
+    it('connect to MongoDB', async () => {
+        const collections = await db.listCollections().toArray();
+        expect(collections).toBeInstanceOf(Array);
     });
 });

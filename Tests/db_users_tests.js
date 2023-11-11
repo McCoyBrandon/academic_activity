@@ -1,7 +1,7 @@
 // MongoDB Connections Section
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://projectAdmin:KLUdywBgxnfbjZrP@atlascluster.ysh6jth.mongodb.net/?retryWrites=true&w=majority";
-const db_name = 'Academic_Activity';
+const dbName = 'Academic_Activity';
 const collection = 'Users';
 
 // Testing variables
@@ -14,7 +14,7 @@ describe('CRUD operations tests for the Projects object', () => {
 
     before(async () => {
         client = await MongoClient.connect(url, { useUnifiedTopology: true});
-        db = client.db(dbdb_name);
+        db = client.db(dbName);
         collection = db.collection(collection);
     });
 
