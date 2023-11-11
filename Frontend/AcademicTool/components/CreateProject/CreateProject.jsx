@@ -87,11 +87,11 @@ const InlineButton = styled(StyledButton)({
   flexGrow: 0,
 });
 
-const membersList = [
-  { id: 1, name: 'Vineetha' },
-  { id: 2, name: 'Harish' },
-  { id: 3, name: 'Brandon' },
-];
+// let membersList = [
+//   { id: 1, name: 'Vineetha' },
+//   { id: 2, name: 'Harish' },
+//   { id: 3, name: 'Brandon' },
+// ];
 
 const CreateProjectForm = () => {
 
@@ -104,15 +104,18 @@ const CreateProjectForm = () => {
     members: [],
   });
 
+  const [membersList, setMembersList] = useState([]);
+
 
   const [memberIds, setMemberIds] = useState(['']);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5038/api/user/createProject', {
+      const response = await axios.post('http://localhost:5038/api/user/createProjects', {
         ...formData,
         members: memberIds.map(id => membersList.find(member => member.id === id)),
+        userId: localStorage.getItem("user_id")
       });
 
       history('/projects/viewProjects');
@@ -121,21 +124,52 @@ const CreateProjectForm = () => {
     }
   };
 
+  useEffect(() => {
+    // Fetch members from the API
+    async function fetchMembers() {
+      try {
+        const response = await axios.get('http://localhost:5038/api/allUsers');
+        // Map the data to select only 'name' and 'id' properties
+        const filteredMembers = response.data.filter((member) => member.name && member._id);
+  
+        const modifiedMembers = filteredMembers.map((member,index) => ({
+          name: member.name,
+          id: index,
+          row_id:member._id,
+        }));
+        setMembersList(modifiedMembers);
+  
+        // Log the contents of membersList
+        console.log("membersList", membersList);
+      } catch (error) {
+        console.error('Failed to fetch members:', error);
+      }
+    }
+  
+    fetchMembers();
+  }, []);
+  
+
+  useEffect(() => {
+    console.log("membersList", membersList)
+
+  }, [membersList])
+
+
+
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
   const handleMemberChange = (index) => (event) => {
     const value = Number(event.target.value);
+    console.log(`Selected value at index ${index}: ${value}`);
     setMemberIds((currentMemberIds) =>
       currentMemberIds.map((id, idx) => (idx === index ? value : id))
     );
   };
-
-  // useEffect(()=>{
-  //   setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
-
-  // },[])
+  
 
   const handleAddMember = () => {
     setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
@@ -175,6 +209,7 @@ const CreateProjectForm = () => {
                 </option>
               ))}
             </StyledSelect>
+
             {index === memberIds.length - 1 && (
               <InlineButton type="button" onClick={handleAddMember}>
                 Add Member

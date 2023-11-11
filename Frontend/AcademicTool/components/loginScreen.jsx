@@ -45,6 +45,8 @@ const LoginScreen = () => {
       {
         localStorage.setItem("email",formData?.email);
         localStorage.setItem("password",formData?.password)
+        localStorage.setItem("user_id",response.data[0]?._id)
+
         navigateTo("/dashboard");
        
       } else{

@@ -88,11 +88,11 @@ const InlineButton = styled(StyledButton)({
     flexGrow: 0,
 });
 
-const membersList = [
-    { id: 1, name: 'Vineetha' },
-    { id: 2, name: 'Harish' },
-    { id: 3, name: 'Brandon' },
-];
+// const membersList = [
+//     { id: 1, name: 'Vineetha' },
+//     { id: 2, name: 'Harish' },
+//     { id: 3, name: 'Brandon' },
+// ];
 
 const CreateTask = () => {
 
@@ -114,6 +114,8 @@ const CreateTask = () => {
         startDate: '',
         endDate: '',
     });
+    const [membersList, setMembersList] = useState([]);
+
 
 
     const [memberIds, setMemberIds] = useState(['']);
@@ -121,7 +123,7 @@ const CreateTask = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5038/api/user/createTask', {
+            const response = await axios.post('http://localhost:5038/api/user/addTasks', {
                 ...formData,
                 members: memberIds.map(id => membersList.find(member => member.id === id)),
                 startDate: formData.startDate,
@@ -134,6 +136,31 @@ const CreateTask = () => {
             console.error('Failed to create project:', error);
         }
     };
+
+    useEffect(() => {
+        // Fetch members from the API
+        async function fetchMembers() {
+          try {
+            const response = await axios.get('http://localhost:5038/api/allUsers');
+            // Map the data to select only 'name' and 'id' properties
+            const filteredMembers = response.data.filter((member) => member.name && member._id);
+      
+            const modifiedMembers = filteredMembers.map((member,index) => ({
+              name: member.name,
+              id: index,
+              row_id:member._id,
+            }));
+            setMembersList(modifiedMembers);
+      
+            // Log the contents of membersList
+            console.log("membersList", membersList);
+          } catch (error) {
+            console.error('Failed to fetch members:', error);
+          }
+        }
+      
+        fetchMembers();
+      }, []);
 
     const handleChange = (event) => {
         setFormData({ ...formData, [event.target.name]: event.target.value });

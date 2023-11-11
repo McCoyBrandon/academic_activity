@@ -11,7 +11,7 @@ const ViewProject = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:5038/api/user/viewProject');
+        const response = await axios.get(`http://localhost:5038/api/user/viewAllProjects?userId=${localStorage.getItem("user_id")}`);
         console.log("response", response)
         const fetchedProjects = response.data && response.data ? response.data : [];
         setProjects(fetchedProjects);
@@ -38,7 +38,7 @@ const ViewProject = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => navigate('/dashboard')} 
+          onClick={() => navigate('/dashboard')} // Replace '/dashboard' with the actual path to your dashboard
         >
           Go to Dashboard
         </Button>
@@ -50,7 +50,7 @@ const ViewProject = () => {
             <div key={project.id} className="project-card" onClick={() => { ProjectRedicrect(project) }}>
               <h3>{project.projectName || 'No Title'}</h3>
               <p>{project.description || 'No Description'}</p>
-              <p>{'Project Members'}</p>
+              {project?.members?.length > 0 && (<p>{'Project Members'}</p>)}
               {project.members && project.members.length > 0 && (
                 <ul >
                   {project.members.map((task, index) => (
@@ -61,7 +61,6 @@ const ViewProject = () => {
                   ))}
                 </ul>
               )}
-               {/* <p>View Tasks</p> */}
             </div>
           ))
         ) : (

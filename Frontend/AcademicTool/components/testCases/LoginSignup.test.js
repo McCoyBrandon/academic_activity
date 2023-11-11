@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import LoginScreen from "../LoginScreen";
+import LoginSignup from "../LoginSignup";
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 
@@ -14,14 +14,20 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockedNavigate,
 }));
 
-describe('LoginScreen Component Tests', () => {
+describe('LoginSignup Component Tests', () => {
   beforeEach(() => {
-    render(<BrowserRouter><LoginScreen /></BrowserRouter>);
+    render(<BrowserRouter><LoginSignup /></BrowserRouter>);
   });
 
-  test('renders the Login header', () => {
-    const headerElement = screen.getByText(/login/i);
+  test('renders the Signup header', () => {
+    const headerElement = screen.getByText(/signup/i);
     expect(headerElement).toBeInTheDocument();
+  });
+
+  test('updates name input value correctly', () => {
+    const nameInput = screen.getByPlaceholderText('Name');
+    fireEvent.change(nameInput, { target: { value: 'vineetha Doe' } });
+    expect(nameInput.value).toBe('vineetha Doe');
   });
 
   test('updates email input value correctly', () => {
@@ -36,23 +42,28 @@ describe('LoginScreen Component Tests', () => {
     expect(passwordInput.value).toBe('password123');
   });
 
-  test('navigates to signup when signup button is clicked', async () => {
-    const signupButton = screen.getByText('/');
-    userEvent.click(signupButton);
-    expect(mockedNavigate).toHaveBeenCalledWith('/');
+  test('navigates to login screen when login button is clicked', async () => {
+    const loginButton = screen.getByTitle('login');
+    userEvent.click(loginButton);
+    expect(mockedNavigate).toHaveBeenCalledWith('/login');
   });
 
   test('handles form submission correctly', async () => {
-    axios.get.mockResolvedValue({ data: { email: 'vineetha@example.com', password: 'password123' } });
+    axios.post.mockResolvedValue({});
 
+    fireEvent.change(screen.getByPlaceholderText('Name'), { target: { value: 'vineetha Doe' } });
     fireEvent.change(screen.getByPlaceholderText('Email Id'), { target: { value: 'vineetha@example.com' } });
     fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
 
-    fireEvent.click(screen.getByText(/login/i));
+    fireEvent.click(screen.getByTitle('sign Up'));
 
     await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('vineetha@example.com'));
-      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('password123'));
+      expect(axios.post).toHaveBeenCalledWith('http://localhost:5038/api/user/addnotes', {
+        name: 'vineetha Doe',
+        email: 'vineetha@example.com',
+        password: 'password123'
+      });
+      expect(mockedNavigate).toHaveBeenCalledWith('/login');
     });
   });
 

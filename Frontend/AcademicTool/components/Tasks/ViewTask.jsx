@@ -19,7 +19,7 @@ const ViewTask = () => {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:5038/api/user/viewTask');
+        const response = await axios.get('http://localhost:5038/api/user/viewAllTasks');
         console.log("response", response)
         const fetchedProjects = response.data && response.data ? response.data : [];
         setProjects(fetchedProjects);

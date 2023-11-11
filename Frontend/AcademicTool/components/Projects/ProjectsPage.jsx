@@ -67,7 +67,7 @@ const ProjectsPage = () => {
             <Button
                 variant="contained"
                 color="primary"
-                onClick={() => navigate('/dashboard')} 
+                onClick={() => navigate('/dashboard')} // Replace '/dashboard' with the actual path to your dashboard
             >
                 Go to Dashboard
             </Button>
