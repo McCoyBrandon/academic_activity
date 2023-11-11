@@ -13,13 +13,14 @@ orbs:
 jobs:
   # Setting up MongoDB connection test. 
   db_tests:
-    docker:
-      - image: cimg/base:stable
+    machine:
+      image: ubuntu-2204:2022.07.1
     steps:
       - checkout
-      - run: "npm test -- tests/"
-        #name: "Test MongoDB Connection and Objects"
-        #command: "npm test -- tests/"
+      - run:
+        name: Test MongoDB Connection and Objects
+        command: npm test
+        working_directory: Tests/
 
 
   # This was included as an example. Left for easy references and as an example.
