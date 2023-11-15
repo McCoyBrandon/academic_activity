@@ -7,12 +7,12 @@
     "ownerID": "*MongoDB_ID for the user owner",
     "members": [
         { 
-            "memberID": "_ID of user",
-            "userName": "User name for display"
+            "memberID": "_ID of user"
+            //"userName": "User name for display"
         },
         { 
-            "memberID": "_ID of user",
-            "userName": "User name for display"
+            "memberID": "_ID of user"
+            //"userName": "User name for display"
         }
     ], 
     "description": "Group project for CSCI 5030. Please refer to the README file.",
@@ -30,11 +30,11 @@
     "completed": "Binary (1 or 0) if the project is completed or not.",
     "reference": [
         { 
-            "memberID": "_ID of user",
+            "referenceID": "_ID of user",
             "reference": "Shorthand title"
         },
         { 
-            "memberID": "_ID of user",
+            "referenceID": "_ID of user",
             "reference": "Shorthand title"
         }
     ] 
