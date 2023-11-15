@@ -1,0 +1,13 @@
+{
+    "reference": "Shorthand title",
+    "title": "Title as presented on publication",
+    "author": "John Doe, Jane Doe",
+    "publisher": "Publisher Company",
+    "year": "2023",
+    "journal": "Journal of cool stuff",
+    "volume": "42",
+    "issue": "7",
+    "pages": "1-10",
+    "url": "journal.com/linktoartical",
+    "subject": "AI"
+}

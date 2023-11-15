@@ -6,11 +6,28 @@
     "taskName": "Create login",
     "ownerID": "*MongoDB_ID for the user owner",
     "members": [
-        { "memberID": "_ID of user"},
-        { "userName": "User name for display"}
+        { 
+            "memberID": "_ID of user",
+            "userName": "User name for display"
+        },
+        { 
+            "memberID": "_ID of user",
+            "userName": "User name for display"
+        }
     ], 
     "userName": "User's username on profile",
     "startDate": "10/1/2023",
     "completeByDate":"11/30/2023",
-    "description": "Create a static login page"
+    "description": "Create a static login page",
+    "completed": "Binary (1 or 0) if the project is completed or not.",
+    "reference": [
+        { 
+            "memberID": "_ID of user",
+            "reference": "Shorthand title"
+        },
+        { 
+            "memberID": "_ID of user",
+            "reference": "Shorthand title"
+        }
+    ] 
 }
