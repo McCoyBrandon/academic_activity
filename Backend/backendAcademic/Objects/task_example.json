@@ -5,6 +5,7 @@
     //"_ID": "*MongoDB_ID*",
     "taskName": "Create login",
     "ownerID": "*MongoDB_ID for the user owner",
+    "priority": "high/medium/low",
     "members": [
         { 
             "memberID": "_ID of user",
