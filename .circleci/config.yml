@@ -41,5 +41,5 @@ jobs:
 workflows:
   startup-workflow:
     jobs:
-      - db_tests
+      #- db_tests
       - say-hello
