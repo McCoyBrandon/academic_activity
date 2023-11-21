@@ -38,7 +38,7 @@ MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopolo
 // Rest of your code remains the same...
 
 // this get request is for login
-app.get('/api/user/getnotes', (request, response) => {
+app.get('/api/user/usersCredentials', (request, response) => {
   const userEmail = request.query.userEmail;
   const userPassword = request.query.userPassword;
   console.log(request.query.userEmail);
@@ -56,7 +56,7 @@ app.get('/api/user/getnotes', (request, response) => {
 });
 
 // this post request is for signin
-app.post('/api/user/addnotes', multer().none(), (request, response) => {
+app.post('/api/user/addUsers', multer().none(), (request, response) => {
     database.collection("user_credentials").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
@@ -77,6 +77,24 @@ app.post('/api/user/addnotes', multer().none(), (request, response) => {
     });
 });
 
+// this post request is for edit or update the password
+app.put('/api/user/updatePassword', (request, response) => {
+  const updatedData = request.body;
+  const userID = request.query.userID;
+
+  database.collection("ProjectTasks").updateOne(
+      {"_id":userID}, // Define the filter to match the document(s) you want to update.
+      { $set: updatedData }, // Use $set to update specific fields with the new data.
+      (error, result) => {
+          if (error) {
+              console.error("Error updating note in MongoDB:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              response.send("Note updated successfully");
+          }
+      }
+  );
+});
 
 
 //splint 2
@@ -102,25 +120,17 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
     });
 });
 
-//this get request is for viewing the projects
+
+//This get request is for viewing the projects
 app.get('/api/user/viewAllProjects', (request, response) => {
-    
-    //console.log(request.query.userId);
-    database.collection('UserProjects').find({}).toArray((error, result) => {
-      if (error) {
-        console.error('Error retrieving data from MongoDB:', error);
-        response.status(500).send('Internal Server Error');
-      } else {
-        // Send the result as a response
-        response.send(result);
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('UserProjects').find({members: {
+      $elemMatch: {
+        id: userID
       }
-    });
-  });
-  
-// members in the singup
-  app.get('/api/allUsers', (request, response) => {
-    
-    database.collection('user_credentials').find({}).toArray((error, result) => {
+    }
+  }).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -131,6 +141,61 @@ app.get('/api/user/viewAllProjects', (request, response) => {
     });
   });
 
+
+//This get request is for delete the projects
+  app.delete('/api/user/deleteProject', (request, response) =>{
+    const projectID = request.query.projectID;
+    console.log(request.query.projectID);
+    database.collection("UserProjects").deleteOne({"_id":projectID},(error,result) =>
+    {
+        if (error) {
+            console.error('Error deleting data from MongoDB:',error);
+            response.status(500).send('Internal Server Error');
+        } else {
+            if (result.deletedCount === 0) {
+                response.status(400).send('Project not found');
+            } else {
+                response.status(200).send('Project deleted');
+            }
+        }
+    });
+});
+
+//this get request is for updateProject the projects
+app.put('/api/user/updateProjects', (request, response) => {
+  const updatedData = request.body;
+  const projectID = request.query.projectID;
+
+  database.collection("UserProject").updateOne(
+      {"projectId":projectID}, // Define the filter to match the document(s) you want to update.
+      { $set: updatedData }, // Use $set to update specific fields with the new data.
+      (error, result) => {
+          if (error) {
+              console.error("Error updating note in MongoDB:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              response.send("Note updated successfully");
+          }
+      }
+  );
+});
+  
+
+// all user or members in the singup
+app.get('/api/allUsers', (request, response) => {
+
+  database.collection('user_credentials').find({}).toArray((error, result) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      response.status(500).send('Internal Server Error');
+    } else {
+      // Send the result as a response
+      response.send(result);
+    }
+  });
+});
+
+//
   app.post('/api/user/projectMembers', multer().none(), (request, response) => {
     database.collection("projectMembers").countDocuments({}, (error, numofDocs) => {
         if (error) {
@@ -152,8 +217,23 @@ app.get('/api/user/viewAllProjects', (request, response) => {
     });
 });
 
+
+app.get('/api/user/projectMember', (request, response) => {
+   
+  //console.log(request.query.userId);
+  database.collection('projectMembers').find({}).toArray((error, result) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      response.status(500).send('Internal Server Error');
+    } else {
+      // Send the result as a response
+      response.send(result);
+    }
+  });
+});
+
 // post to create or add alltasks
-  app.post('/api/user/addTasks', multer().none(), (request, response) => {
+  app.post('/api/user/createTasks', multer().none(), (request, response) => {
     database.collection("ProjectTasks").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
@@ -178,7 +258,7 @@ app.get('/api/user/viewAllProjects', (request, response) => {
 app.get('/api/user/viewAllTasks', (request, response) => {
    
     //console.log(request.query.userId);
-    database.collection('UserProjects').find({}).toArray((error, result) => {
+    database.collection('ProjectTasks').find({"projectId":projectID}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -189,10 +269,56 @@ app.get('/api/user/viewAllTasks', (request, response) => {
     });
   });
 
+//this is get view all tasks by Date
+  app.get('/api/user/viewAllTasksByDate', (request, response) => {
+    const Date = request.query.Date;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"startDate":Date}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  //this is get view all tasks by person 
+  app.get('/api/user/viewAllTasksByperson', (request, response) => {
+    const Assignedto = request.query.Assignedto;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"assign":Assignedto}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  //this is get view all tasks by status
+  app.get('/api/user/viewAllTasksBystatus', (request, response) => {
+    const taskStatus = request.query.taskStatus;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"status":taskStatus}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  //this request delete the task
   app.delete('/api/user/userDeleteTask', (request, response) => {
-    const taskId = request.query.task;
+    const taskID = request.query.taskID;
   
-    database.collection('ProjectTasks').deleteOne({}, (error, result) => {
+    database.collection('ProjectTasks').deleteOne({"_id":taskID}, (error, result) => {
       if (error) {
         console.error('Error deleting data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -205,6 +331,25 @@ app.get('/api/user/viewAllTasks', (request, response) => {
       }
     });
   });
+
+  //this request update the task
+  app.put('/api/user/updateTasks', (request, response) => {
+    const updatedData = request.body;
+    const taskID = request.query.taskID;
+
+    database.collection("ProjectTasks").updateOne(
+        {"_id":taskID}, // Define the filter to match the document(s) you want to update.
+        { $set: updatedData }, // Use $set to update specific fields with the new data.
+        (error, result) => {
+            if (error) {
+                console.error("Error updating note in MongoDB:", error);
+                response.status(500).send("Internal Server Error");
+            } else {
+                response.send("Note updated successfully");
+            }
+        }
+    );
+});
 
 
 
