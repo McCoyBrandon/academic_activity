@@ -3,14 +3,21 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+
   height: 100vh;
   width: 200vh;
+
+
+
   background-color: #f0f0f0; /* Adjust background color as per your preference */
 }
 
 .heading {
   font-size: 36px;
   margin-bottom: 20px;
+
+
 }
 
 .icons {
@@ -26,6 +33,8 @@
 
 .icon img {
   width: 100px; /* Adjust image size as needed */
+
+  
 }
 
 .icon-label {
