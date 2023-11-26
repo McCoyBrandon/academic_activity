@@ -1,0 +1,71 @@
+----ALL POST method payloads----
+
+
+'api/user/addUsers-
+
+-json
+
+{
+ Name:harish
+ email:hae@3121gmail.com
+ password:aasfa
+ 
+}
+
+api/user/projectMembers- create all member of project every member is one objects.//verrifing the users by this api to load into prjects page and task page //user this api for assigned dropbox to assign tasks
+{
+project:projectID
+projectNmae:name
+username:
+userID:
+}
+{
+project:projectID
+projectNmae:name
+username:
+userID:
+}
+
+
+api/user/creatProjects
+{
+projectName:"AI"
+user:"mongodbId
+startDate:
+endDate:
+priority:""
+"members":[
+{
+"memberID":"mongodb ID of user",
+"Name":"user of who created project name"
+},
+{
+"memberID":"mongodb ID of user",
+"Name":"User name"
+}
+]
+"descriptionm":"group projects for csci"
+}
+
+
+api/user/createtasks
+{
+user:name
+user:id
+project:id
+projectName:
+task:
+assigned:name:
+assignedUserID: userId mongodb
+startDate:
+endDate:
+Status:"todo/inprocess/done"
+}
+
+
+
+
+
+
+
+
