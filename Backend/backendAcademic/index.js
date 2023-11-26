@@ -1,48 +1,48 @@
-const express= require("express");
-var MongoClient=require("mongodb").MongoClient;
-var cors=require("cors");
+const express = require("express");
+const MongoClient = require("mongodb").MongoClient;
+const cors = require("cors");
 
-const multer= require('multer');
+const multer = require('multer');
 const { default: mongoose } = require("mongoose");
 
-const app=express();
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-//  Harish's test server
-var CONNECTION_STRING="mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
-var DATABASESNAME="user-academic-activity";
+var CONNECTION_STRING = "mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
+var DATABASESNAME = "user-academic-activity";
 var database;
 
+// Move server initialization logic outside of app.listen
+MongoClient.connect(CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
+  if (error) {
+    console.error('Error connecting to MongoDB:', error);
+    process.exit(1);
+  } else {
+    database = client.db(DATABASESNAME);
+    console.log("Successfully connected to MongoDB");
 
-///* Brandon's Academic_Activity Server
-// var CONNECTION_STRING="mongodb+srv://projectAdmin:KLUdywBgxnfbjZrP@atlascluster.ysh6jth.mongodb.net/?retryWrites=true&w=majority";
-// var DATABASESNAME="Academic_Activity";
-// var database;
-//*/
+    // Start the server
+    server = app.listen(5038, () => {
+      console.log("Server is running on port 5038");
+    });
 
-// Mongo server connection test.
-app.listen(5038,()=>{
-    MongoClient.connect((CONNECTION_STRING),(error,client)=>{
-        database=client.db(DATABASESNAME);
-        console.log("succeffuly connected");
-    })
-})
+    // Close the MongoDB connection when the server is closed
+    server.on('close', () => {
+      console.log("Closing MongoDB connection");
+      client.close();
+    });
+  }
+});
 
+// Rest of your code remains the same...
 
-//
-// User frontend call functions
-//
-/* 
-Function: Find a User based on their email and password.
-Return: User's MondoDB _id
-*/
-app.get('/api/user/getnotes', (request, response) => {
+// this get request is for login
+app.get('/api/user/usersCredentials', (request, response) => {
   const userEmail = request.query.userEmail;
   const userPassword = request.query.userPassword;
   console.log(request.query.userEmail);
-  database.collection('Users').find({ "email":userEmail
+  database.collection('user_credentials').find({ "email":userEmail
   , "password":userPassword   
   }).toArray((error, result) => {
     if (error) {
@@ -55,23 +55,16 @@ app.get('/api/user/getnotes', (request, response) => {
   });
 });
 
-
-/* 
-Function: Create a User based on their email and password, and return the user.
-Return: User's MondoDB _id
-*/
-
-app.post('/api/user/addnotes', multer().none(), (request, response) => {
-    const userEmail = request.query.userEmail;
-    const userPassword = request.query.userPassword;
-    database.collection("Users").countDocuments({}, (error, numofDocs) => {
+// this post request is for signin
+app.post('/api/user/addUsers', multer().none(), (request, response) => {
+    database.collection("user_credentials").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
             response.status(500).send("Internal Server Error");
         } else {
             const body = request.body;
 
-            database.collection("Users").insertOne(body, (insertError) => {
+            database.collection("user_credentials").insertOne(body, (insertError) => {
                 if (insertError) {
                     console.error("Error adding note:", insertError);
                     response.status(500).send("Internal Server Error");
@@ -84,27 +77,25 @@ app.post('/api/user/addnotes', multer().none(), (request, response) => {
     });
 });
 
-/* 
-Function: Delete a User based on their email and password.
-*/
-app.delete('/api/user/deleteUser', (request, response) =>{
-    const userEmail = request.query.userEmail;
-    const userPassword = request.query.userPassword;
+// this post request is for edit or update the password
+app.put('/api/user/updatePassword', (request, response) => {
+  const updatedData = request.body;
+  const userID = request.query.userID;
 
-    database.collection("Users").deleteOne({"email": userEmail, "password": userPassword}, (error,result) =>
-    {
-        if (error) {
-            console.error('Error deleting data from MongoDB:',error);
-            response.status(500).send('Internal Server Error');
-        } else {
-            if (result.deletedCount === 0) {
-                response.status(400).send('User not found');
-            } else {
-                response.status(200).send('User credentials deleted');
-            }
-        }
-    });
+  database.collection("ProjectTasks").updateOne(
+      {"_id":userID}, // Define the filter to match the document(s) you want to update.
+      { $set: updatedData }, // Use $set to update specific fields with the new data.
+      (error, result) => {
+          if (error) {
+              console.error("Error updating note in MongoDB:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              response.send("Note updated successfully");
+          }
+      }
+  );
 });
+
 
 //splint 2
 // this post request create and add project
@@ -116,13 +107,13 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
         } else {
             const body = request.body;
 
-            database.collection("Projects").insertOne(body, (insertError) => {
+            database.collection("UserProjects").insertOne(body, (insertError) => {
                 if (insertError) {
                     console.error("Error adding note:", insertError);
                     response.status(500).send("Internal Server Error");
                 } else {
                     console.log(body);
-                    response.json("Note added successfully");
+                    response.json("project created successfully");
                 }
             });
         }
@@ -130,11 +121,16 @@ app.post('/api/user/createProjects', multer().none(), (request, response) => {
 });
 
 
-//this get request is for viewing the projects
+//This get request is for viewing the projects
 app.get('/api/user/viewAllProjects', (request, response) => {
-    const userId = request.query.userId;
-    console.log(request.query.userId);
-    database.collection('Projects').find({}).toArray((error, result) => {
+    const userID = request.query.userID;
+    console.log(request.query.userID);
+    database.collection('UserProjects').find({members: {
+      $elemMatch: {
+        id: userID
+      }
+    }
+  }).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -144,14 +140,13 @@ app.get('/api/user/viewAllProjects', (request, response) => {
       }
     });
   });
- 
-/* 
-Function: Delete a project based on a given projectId
-*/
-app.delete('/api/user/deleteProject', (request, response) =>{
+
+
+//This get request is for delete the projects
+  app.delete('/api/user/deleteProject', (request, response) =>{
     const projectID = request.query.projectID;
     console.log(request.query.projectID);
-    database.collection("Projects").deleteOne(projectID, (error,result) =>
+    database.collection("UserProjects").deleteOne({"_id":projectID},(error,result) =>
     {
         if (error) {
             console.error('Error deleting data from MongoDB:',error);
@@ -166,93 +161,87 @@ app.delete('/api/user/deleteProject', (request, response) =>{
     });
 });
 
-//
-// Task frontend call functions
-//
+//this get request is for updateProject the projects
+app.put('/api/user/updateProjects', (request, response) => {
+  const updatedData = request.body;
+  const projectID = request.query.projectID;
 
-/* 
-Function: Get a task based on a provided name, and return the id.
-Return: Task's MondoDB _id
-*/
-app.post('/api/user/createTask', multer().none(), (request, response) => {
-    database.collection("Projects").countDocuments({}, (error, numofDocs) => {
-        if (error) {
-            console.error("Error counting documents:", error);
-            response.status(500).send("Internal Server Error");
-        } else {
-            const body = request.body;
-
-            database.collection("Projects").insertOne(body, (insertError) => {
-                if (insertError) {
-                    console.error("Error adding note:", insertError);
-                    response.status(500).send("Internal Server Error");
-                } else {
-                    console.log(body);
-                    response.json("Note added successfully");
-                }
-            });
-        }
-    });
-});
-
-/* 
-Function: Get a task list based on a provided value, and return the array of Ids.
-Return: Array of tasks
-*/
-
-app.get('/api/user/viewTask', (request, response) => {
-    const userId = request.query.userId;
-    console.log(request.query.userId);
-    database.collection('Tasks').find({}).toArray((error, result) => {
-      if (error) {
-        console.error('Error retrieving data from MongoDB:', error);
-        response.status(500).send('Internal Server Error');
-      } else {
-        // Send the result as a response
-        response.send(result);
+  database.collection("UserProject").updateOne(
+      {"projectId":projectID}, // Define the filter to match the document(s) you want to update.
+      { $set: updatedData }, // Use $set to update specific fields with the new data.
+      (error, result) => {
+          if (error) {
+              console.error("Error updating note in MongoDB:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              response.send("Note updated successfully");
+          }
       }
-    });
-  });
+  );
+});
   
- 
-/* 
-Function: Delete a task based on a given taskId
-*/
-  app.delete('/api/user/deleteTask', (request, response) =>{
-    const taskID = request.query.taskID;
-    console.log(request.query.taskID);
-    database.collection("Tasks").deleteOne(taskID, (error,result) =>
-    {
-        if (error) {
-            console.error('Error deleting data from MongoDB:',error);
-            response.status(500).send('Internal Server Error');
-        } else {
-            if (result.deletedCount === 0) {
-                response.status(400).send('Project not found');
-            } else {
-                response.status(200).send('Project deleted');
-            }
-        }
-    });
+
+// all user or members in the singup
+app.get('/api/allUsers', (request, response) => {
+
+  database.collection('user_credentials').find({}).toArray((error, result) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      response.status(500).send('Internal Server Error');
+    } else {
+      // Send the result as a response
+      response.send(result);
+    }
+  });
 });
 
-
 //
-// References call functions
-//
-/* 
-Function: Create a project based on a provided name, and return the id.
-Return: Reference's MondoDB _id
-*/
-app.post('/api/user/createReference', multer().none(), (request, response) => {
-    database.collection("References").countDocuments({}, (error, numofDocs) => {
+  app.post('/api/user/projectMembers', multer().none(), (request, response) => {
+    database.collection("projectMembers").countDocuments({}, (error, numofDocs) => {
         if (error) {
             console.error("Error counting documents:", error);
             response.status(500).send("Internal Server Error");
         } else {
             const body = request.body;
 
-            database.collection("References").insertOne(body, (insertError) => {
+            database.collection("projectMembers").insertOne(body, (insertError) => {
+                if (insertError) {
+                    console.error("Error adding note:", insertError);
+                    response.status(500).send("Internal Server Error");
+                } else {
+                    console.log(body);
+                    response.json("add member to project in separate collection successfully");
+                }
+            });
+        }
+    });
+});
+
+
+app.get('/api/user/projectMember', (request, response) => {
+   
+  //console.log(request.query.userId);
+  database.collection('projectMembers').find({}).toArray((error, result) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      response.status(500).send('Internal Server Error');
+    } else {
+      // Send the result as a response
+      response.send(result);
+    }
+  });
+});
+
+// post to create or add alltasks
+  app.post('/api/user/createTasks', multer().none(), (request, response) => {
+    database.collection("ProjectTasks").countDocuments({}, (error, numofDocs) => {
+        if (error) {
+            console.error("Error counting documents:", error);
+            response.status(500).send("Internal Server Error");
+        } else {
+            const body = request.body;
+
+            database.collection("ProjectTasks").insertOne(body, (insertError) => {
                 if (insertError) {
                     console.error("Error adding note:", insertError);
                     response.status(500).send("Internal Server Error");
@@ -265,14 +254,11 @@ app.post('/api/user/createReference', multer().none(), (request, response) => {
     });
 });
 
-/* 
-Function: Get a reference list based on a projectID, and return the array of ids.
-Return: References's in a MondoDB _id list
-*/
-app.get('/api/user/viewReferencesByProject', (request, response) => {
-    const referenceID = request.query.referenceID;
-    console.log(request.query.referenceID);
-    database.collection('References').find({"projectID": referenceID}).toArray((error, result) => {
+//this is get viewall tasks
+app.get('/api/user/viewAllTasks', (request, response) => {
+   
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"projectId":projectID}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -283,15 +269,11 @@ app.get('/api/user/viewReferencesByProject', (request, response) => {
     });
   });
 
-
-  /* 
-Function: Get a reference list based on a taskID, and return the array of ids.
-Return: References's in a MondoDB _id list
-*/
-app.get('/api/user/viewReferencesByTask', (request, response) => {
-    const referenceID = request.query.referenceID;
-    console.log(request.query.referenceID);
-    database.collection('References').find({"taskID": referenceID}).toArray((error, result) => {
+//this is get view all tasks by Date
+  app.get('/api/user/viewAllTasksByDate', (request, response) => {
+    const Date = request.query.Date;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"startDate":Date}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -302,24 +284,75 @@ app.get('/api/user/viewReferencesByTask', (request, response) => {
     });
   });
 
+  //this is get view all tasks by person 
+  app.get('/api/user/viewAllTasksByperson', (request, response) => {
+    const Assignedto = request.query.Assignedto;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"assign":Assignedto}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
 
-/* 
-Function: Delete a reference based on a given referenceID
-*/
-app.delete('/api/user/deleteReferences', (request, response) =>{
-    const referenceID = request.query.referenceID;
-    console.log(request.query.referenceID);
-    database.collection("References").deleteOne(referenceID, (error,result) =>
-    {
-        if (error) {
-            console.error('Error deleting data from MongoDB:',error);
-            response.status(500).send('Internal Server Error');
+  //this is get view all tasks by status
+  app.get('/api/user/viewAllTasksBystatus', (request, response) => {
+    const taskStatus = request.query.taskStatus;
+    //console.log(request.query.userId);
+    database.collection('ProjectTasks').find({"status":taskStatus}).toArray((error, result) => {
+      if (error) {
+        console.error('Error retrieving data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        // Send the result as a response
+        response.send(result);
+      }
+    });
+  });
+
+  //this request delete the task
+  app.delete('/api/user/userDeleteTask', (request, response) => {
+    const taskID = request.query.taskID;
+  
+    database.collection('ProjectTasks').deleteOne({"_id":taskID}, (error, result) => {
+      if (error) {
+        console.error('Error deleting data from MongoDB:', error);
+        response.status(500).send('Internal Server Error');
+      } else {
+        if (result.deletedCount === 0) {
+          response.status(404).send('User not found');
         } else {
-            if (result.deletedCount === 0) {
-                response.status(400).send('Project not found');
+          response.status(200).send('Task deleted');
+        }
+      }
+    });
+  });
+
+  //this request update the task
+  app.put('/api/user/updateTasks', (request, response) => {
+    const updatedData = request.body;
+    const taskID = request.query.taskID;
+
+    database.collection("ProjectTasks").updateOne(
+        {"_id":taskID}, // Define the filter to match the document(s) you want to update.
+        { $set: updatedData }, // Use $set to update specific fields with the new data.
+        (error, result) => {
+            if (error) {
+                console.error("Error updating note in MongoDB:", error);
+                response.status(500).send("Internal Server Error");
             } else {
-                response.status(200).send('Project deleted');
+                response.send("Note updated successfully");
             }
         }
-    });
+    );
 });
+
+
+
+
+
+  module.exports = app;

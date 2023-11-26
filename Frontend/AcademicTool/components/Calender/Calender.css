@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.myCalendarClass .rbc-header,
+.myCalendarClass .rbc-row-content .rbc-today {
+  @apply text-gray-800; /* Dark text for better contrast */
+}
+
+.myCalendarClass .rbc-toolbar-label {
+  @apply text-gray-800; /* Dark text for month label */
+}
+
+.myCalendarClass .rbc-btn {
+  @apply text-gray-800; /* Dark text for navigation buttons */
+}

@@ -11,7 +11,7 @@ const AcademicMainScreen = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`http://localhost:5038/api/user/getnotes?userEmail=${localStorage.getItem("email")}&userPassword=${localStorage.getItem("password")}`);
+      const response = await axios.get(`http://localhost:5038/api/user/usersCredentials?userEmail=${localStorage.getItem("email")}&userPassword=${localStorage.getItem("password")}`);
       setTotalReactPackages(response.data);
       console.log(totalReactPackages)
       
