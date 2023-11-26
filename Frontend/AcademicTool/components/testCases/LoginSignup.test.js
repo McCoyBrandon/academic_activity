@@ -58,7 +58,7 @@ describe('LoginSignup Component Tests', () => {
     fireEvent.click(screen.getByTitle('sign Up'));
 
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith('http://localhost:5038/api/user/addnotes', {
+      expect(axios.post).toHaveBeenCalledWith('http://localhost:5038/api/user/addUsers', {
         name: 'vineetha Doe',
         email: 'vineetha@example.com',
         password: 'password123'

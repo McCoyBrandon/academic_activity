@@ -110,7 +110,7 @@ const CreateProjectForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5038/api/user/createProject', {
+      const response = await axios.post('http://localhost:5038/api/user/createProjects', {
         ...formData,
         members: memberIds.map(id => membersList.find(member => member.id === id)),
       });
