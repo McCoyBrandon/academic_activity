@@ -15,8 +15,10 @@ beforeAll(async () => {
 
   database = mongoose.connection;
 });
-  
 
+// Start describing the API tests
+describe("API Tests", () => {
+   
   describe("POST /api/user/addUsers", () => {
     it("should add a new note", async () => {
       const newNote = {
