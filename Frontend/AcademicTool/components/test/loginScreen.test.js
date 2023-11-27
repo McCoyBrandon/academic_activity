@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import LoginScreen from "../LoginScreen";
+import LoginScreen from "../loginScreen";
 import axios from 'axios';
 import userEvent from '@testing-library/user-event';
 
