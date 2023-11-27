@@ -56,11 +56,11 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Frontend/AcademicTool/components/testCases
+          working_directory: Frontend/AcademicTool/components
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Frontend/AcademicTool/components/testCases
+          working_directory: Frontend/AcademicTool/components
 
   backend-tests:
     machine:
