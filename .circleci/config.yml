@@ -11,34 +11,32 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  # Setting up MongoDB connection test. 
-  
   db_tests:
     executor: node/default
     steps:
       - checkout
       - node/install-packages:
-        pkg-manager: npm
-      - run
-        name: Run Jest Tests
-        command: |
-          npx jest - config Tests/jest.config.js Tests/
+          pkg-manager: npm
+      - run:
+          name: Run Jest Tests
+          command: |
+            npx jest --config Tests/jest.config.js Tests/
 
   build_and_push:
     docker:
-      -image: cimg/node:14.17
+      - image: cimg/node:14.17
     steps:
       - checkout
       - setup_remote_docker:
-        version: 19.03.13
+          version: 19.03.13
 
       - node/install-packages:
-        pkg-manage: npm
+          pkg-manager: npm
       
       - run:
-        name: Run Jest Tests
-        command: |
-          npx jest - config Tests/jest.config.js Tests/
+          name: Run Jest Tests
+          command: |
+            npx jest --config Tests/jest.config.js Tests/
 
       - run:
           name: Build Docker Image
@@ -48,7 +46,7 @@ jobs:
       - run:
           name: Authenticate with Docker Hub
           command: |
-            echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_USERNAME --password-stdin
+            echo $DOCKERHUB_PASS | docker login --username mccoybs --password-stdin
 
       - run:
           name: Push Docker Image to Docker Hub
@@ -81,6 +79,6 @@ workflows:
   build_and_deploy:
     jobs:
       - build_and_push:
-        filters:
-          branches:
-            only: main
+          filters:
+            branches:
+              only: main
