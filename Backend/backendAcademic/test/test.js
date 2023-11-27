@@ -19,7 +19,7 @@ beforeAll(async () => {
 // Start describing the API tests
 describe("API Tests", () => {
     // Describe the specific endpoint being tested
-    describe("GET /api/user/getnotes", () => {
+    describe("GET /api/user/usersCredentials", () => {
       // Write a test case for a specific scenario
       it("should return user data for valid login", async () => {
         const validCredentials = {
@@ -29,7 +29,7 @@ describe("API Tests", () => {
       
         try {
           const response = await request
-            .get("/api/user/getnotes")
+            .get("/api/user/usersCredentials")
             .query(validCredentials);
             console.log(validCredentials);
       
@@ -48,14 +48,14 @@ describe("API Tests", () => {
     });
   
 
-  describe("POST /api/user/addnotes", () => {
+  describe("POST /api/user/addUsers", () => {
     it("should add a new note", async () => {
       const newNote = {
         email: "varun@321",
         password: "varun321",
       };
       const response = await request
-        .post("/api/user/addnotes")
+        .post("/api/user/addUsers")
         .send(newNote);
 
       expect(response.status).toBe(200);
