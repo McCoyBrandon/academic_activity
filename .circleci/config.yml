@@ -5,21 +5,55 @@ version: 2.1
 orbs:
   #jira: circleci/jira@2.1.0
   #newman: postman/newman@1.0.0
-  #node: circleci/node@5.1.0
-  #docker: circleci/docker@2.4.0
+  node: circleci/node@5.1.0
+  docker: circleci/docker@2.4.0
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/configuration-reference/#jobs
 jobs:
   # Setting up MongoDB connection test. 
+  
   db_tests:
-    docker:
-      - image: cimg/base:stable
+    executor: node/default
     steps:
       - checkout
-      - run: "npm test -- tests/"
-        #name: "Test MongoDB Connection and Objects"
-        #command: "npm test -- tests/"
+      - node/install-packages:
+        pkg-manager: npm
+      - run
+        name: Run Jest Tests
+        command: |
+          npx jest - config Tests/jest.config.js Tests/
+
+  build_and_push:
+    docker:
+      -image: cimg/node:14.17
+    steps:
+      - checkout
+      - setup_remote_docker:
+        version: 19.03.13
+
+      - node/install-packages:
+        pkg-manage: npm
+      
+      - run:
+        name: Run Jest Tests
+        command: |
+          npx jest - config Tests/jest.config.js Tests/
+
+      - run:
+          name: Build Docker Image
+          command: |
+            docker build -t mccoybs/docker_assignment:$DOCKER_TAG .
+
+      - run:
+          name: Authenticate with Docker Hub
+          command: |
+            echo $DOCKERHUB_PASS | docker login --username $DOCKERHUB_USERNAME --password-stdin
+
+      - run:
+          name: Push Docker Image to Docker Hub
+          command: |
+            docker push mccoybs/docker_assignment:$DOCKER_TAG
 
 
   # This was included as an example. Left for easy references and as an example.
@@ -39,10 +73,14 @@ jobs:
 # Orchestrate jobs using workflows
 # See: https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  startup-workflow:
+  main:
     jobs:
       - db_tests
       - say-hello
 
-
-  
+  build_and_deploy:
+    jobs:
+      - build_and_push:
+        filters:
+          branches:
+            only: main
