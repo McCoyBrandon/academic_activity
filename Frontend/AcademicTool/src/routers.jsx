@@ -14,24 +14,24 @@ import CreateTask from '../components/Tasks/CreateTask';
 import ViewTask from '../components/Tasks/ViewTask';
 import ComingSoon from '../components/ComingSoon/ComingSoon';
 import EventCalendarComponent from '../components/Calender/Calender';
+import LandingPage from '../components/LandingPage';
 
 
 const Routers = () => {
   return (
     <Router>
       <Routes>
-      <Route path="/" exact element={ <LoginSignup/> } />
-      <Route path="/loginScreen" exact element={ <LoginScreen/> } />
-      <Route path="/calender" exact element={ <EventCalendarComponent/> } />
-      <Route path="/dashboard" exact element={ <Dashboard/> } />
-      <Route path="/projects" exact element={ <ProjectsPage/> } />
-      <Route path="/projects/createProject" exact element={ <CreateProjectForm/> } />
-      <Route path="/projects/viewProjects" exact element={ <ViewProject/> } />
-      <Route path="/projects/viewProjects/tasks" exact element={ <Tasks/> } />
-      <Route path="/projects/viewProjects/tasks/create" exact element={ <CreateTask/> } />
-      <Route path="/projects/viewProjects/tasks/view" exact element={ <ViewTask/> } />
-
-
+        <Route path="/" exact element={<LandingPage />} />
+        <Route path="/signUp" exact element={<LoginSignup />} />
+        <Route path="/loginScreen" exact element={<LoginScreen />} />
+        <Route path="/calender" exact element={<EventCalendarComponent />} />
+        <Route path="/dashboard" exact element={<Dashboard />} />
+        <Route path="/projects" exact element={<ProjectsPage />} />
+        <Route path="/projects/createProject" exact element={<CreateProjectForm />} />
+        <Route path="/projects/viewProjects" exact element={<ViewProject />} />
+        <Route path="/projects/viewProjects/tasks" exact element={<Tasks />} />
+        <Route path="/projects/viewProjects/tasks/create" exact element={<CreateTask />} />
+        <Route path="/projects/viewProjects/tasks/view" exact element={<ViewTask />} />
       </Routes>
     </Router>
   );

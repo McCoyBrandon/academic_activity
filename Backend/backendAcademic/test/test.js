@@ -18,7 +18,36 @@ beforeAll(async () => {
 
 // Start describing the API tests
 describe("API Tests", () => {
-   
+    // Describe the specific endpoint being tested
+    describe("GET /api/user/usersCredentials", () => {
+      // Write a test case for a specific scenario
+      it("should return user data for valid login", async () => {
+        const validCredentials = {
+          userEmail: "korukondaharish321@gmail.com",
+          userPassword: "Harish321"
+        };
+      
+        try {
+          const response = await request
+            .get("/api/user/usersCredentials")
+            .query(validCredentials);
+            console.log(validCredentials);
+      
+          expect(response.status).toBe(200);
+          console.log(response.status);
+          expect(response.body).toBeInstanceOf(Array);
+          console.log(response.body);
+          expect(response.body.length).toBeGreaterThan(0);
+        } catch (error) {
+          // If an error occurs, log it and fail the test
+          console.error("Error:", error);
+          throw error;
+        }
+      });
+      
+    });
+  
+
   describe("POST /api/user/addUsers", () => {
     it("should add a new note", async () => {
       const newNote = {

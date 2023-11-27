@@ -56,11 +56,12 @@ const LoginSignup = () => {
           <div className="w-full md:w-3/6 p-5 md:p-20">
             <div className="bg-white rounded-lg p-6">
               <div className="mb-4">
-                <h2 className="text-4xl font-semibold  mb-4">SignUP</h2>
+                <h2 className="text-4xl font-semibold mb-4">Sign Up</h2>
                 <p className="text-base text-gray-600 mb-7">
-                  Get access to our expert insights about your students across departments, branches, and cities today!
+                  Join now to streamline your academic and research endeavors. Unlock a world of organized task management, comprehensive portfolio building, and efficient project tracking!
                 </p>
               </div>
+
               <div className="space-y-4">
                 <div className="mb-2">
                   <label htmlFor="universityId" className="text-sm font-medium text-gray-600">

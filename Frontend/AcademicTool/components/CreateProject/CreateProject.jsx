@@ -3,20 +3,13 @@ import axios from 'axios';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
+import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
 
+// Animations
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
-const FormContainer = styled('div')({
-  background: 'linear-gradient(45deg, #6DD5FA, #FF758C)',
-  padding: '40px',
-  borderRadius: '15px',
-  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-  maxWidth: '400px',
-  margin: 'auto',
-  marginTop: '50px',
-});
 
 const pulseAnimation = keyframes`
   0% { transform: scale(1); }
@@ -24,13 +17,60 @@ const pulseAnimation = keyframes`
   100% { transform: scale(1); }
 `;
 
-const FormTitle = styled('h2')({
-  color: '#FFFFFF',
-  textAlign: 'center',
-  marginBottom: '30px',
-  animation: `${pulseAnimation} 2s infinite`,
+// Styled Components
+const PageContainer = styled('div')({
+  minHeight: '100vh',
+  background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '20px',
 });
 
+const TopBar = styled('div')({
+  position: 'absolute',
+  top: 0,
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'flex-start',
+  padding: '20px',
+});
+
+const BackButton = styled('button')({
+  backgroundColor: 'transparent',
+  border: 'none',
+  cursor: 'pointer',
+  color: 'black',
+  fontSize: '1.2rem',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '10px',
+  '&:hover': {
+    color: '#FF758C',
+  },
+});
+
+const FormContainer = styled('div')({
+  background: 'white',
+  padding: '40px',
+  width:"550px",
+  borderRadius: '20px',
+  // boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+  maxWidth: '800px',
+  animation: `${fadeIn} 1s ease-out`,
+});
+
+const FormTitle = styled('h3')({
+  color: '#2c3e50',
+  textAlign: 'center',
+  marginBottom: '30px',
+  fontSize: '1.5rem',
+  // animation: `${pulseAnimation} 2s infinite`,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+});
 const StyledForm = styled('form')({
   display: 'flex',
   flexDirection: 'column',
@@ -38,48 +78,46 @@ const StyledForm = styled('form')({
 });
 
 const StyledInput = styled('input')({
-  padding: '10px',
-  borderRadius: '5px',
-  border: 'none',
+  padding: '15px',
+  borderRadius: '8px',
+  border: '1px solid #ced4da',
   outline: 'none',
-  background: '#FFFFFF',
-  color: '#000000',
+  width: '100%', // Increased width
   '&::placeholder': {
-    color: '#000000',
-    opacity: 1
+    color: '#adb5bd',
   },
   '&:focus': {
-    boxShadow: '0 0 0 2px #FF758C',
+    boxShadow: '0 0 0 2px #3498db',
   },
 });
+
 const StyledButton = styled('button')({
-  padding: '10px 20px',
-  borderRadius: '5px',
+  padding: '15px 20px',
+  borderRadius: '8px',
   border: 'none',
   cursor: 'pointer',
-  backgroundColor: '#fff',
-  color: '#6DD5FA',
+  backgroundColor: '#3498db',
+  color: '#ffffff',
   fontWeight: 'bold',
   '&:hover': {
-    backgroundColor: '#FF758C',
+    backgroundColor: '#2980b9',
   },
 });
 
 const StyledSelect = styled('select')({
-  padding: '10px',
-  borderRadius: '5px',
-  border: 'none',
+  padding: '15px',
+  borderRadius: '8px',
+  border: '1px solid #ced4da',
   outline: 'none',
-  background: '#FFFFFF',
-  color: '#000000',
-  marginBottom: '10px',
+  '&:focus': {
+    boxShadow: '0 0 0 2px #3498db',
+  },
 });
 
 const MemberSelectionContainer = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  marginBottom: '10px',
 });
 
 const InlineButton = styled(StyledButton)({
@@ -87,16 +125,13 @@ const InlineButton = styled(StyledButton)({
   flexGrow: 0,
 });
 
-const membersList = [
-  { id: 1, name: 'Vineetha' },
-  { id: 2, name: 'Harish' },
-  { id: 3, name: 'Brandon' },
-];
-
 const CreateProjectForm = () => {
 
   const history = useNavigate();
 
+  const handleGoBack = () => {
+    history(-1);
+  };
 
   const [formData, setFormData] = useState({
     projectName: '',
@@ -104,15 +139,34 @@ const CreateProjectForm = () => {
     members: [],
   });
 
+  const [membersList, setMembersList] = useState([]);
+
 
   const [memberIds, setMemberIds] = useState(['']);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+
+      let membersPayload = memberIds.map(id => membersList.find(member => member.id === id));
+
+      const currentUser={
+        name:JSON.parse(localStorage.getItem("user_creds"))?.name,
+        row_id: JSON.parse(localStorage.getItem("user_creds"))?._id
+
+      }
+      // console.log("test",membersPayload)
+      membersPayload.push(currentUser);
+
+      // membersPayload={...membersPayload,}
+
+      // console.log("mem",membersPayload)
+
       const response = await axios.post('http://localhost:5038/api/user/createProjects', {
         ...formData,
-        members: memberIds.map(id => membersList.find(member => member.id === id)),
+        members:membersPayload
+        // members: memberIds.map(id => membersList.find(member => member.id === id)),
+        // id: JSON.parse(localStorage.getItem("user_creds"))?._id
       });
 
       history('/projects/viewProjects');
@@ -121,71 +175,103 @@ const CreateProjectForm = () => {
     }
   };
 
+  useEffect(() => {
+    async function fetchMembers() {
+      try {
+        const response = await axios.get('http://localhost:5038/api/allUsers');
+        const filteredMembers = response.data.filter((member) => member.name && member._id);
+        const modifiedMembers = filteredMembers.map((member, index) => ({
+          name: member.name,
+          id: index,
+          row_id: member._id,
+        }));
+        setMembersList(modifiedMembers);
+        // console.log("membersList", membersList);
+      } catch (error) {
+        // console.error('Failed to fetch members:', error);
+      }
+    }
+    fetchMembers();
+  }, []);
+
+  useEffect(() => {
+    console.log("membersList", membersList)
+  }, [membersList])
+
   const handleChange = (event) => {
     setFormData({ ...formData, [event.target.name]: event.target.value });
   };
 
   const handleMemberChange = (index) => (event) => {
     const value = Number(event.target.value);
+    // console.log(`Selected value at index ${index}: ${value}`);
     setMemberIds((currentMemberIds) =>
       currentMemberIds.map((id, idx) => (idx === index ? value : id))
     );
   };
-
-  // useEffect(()=>{
-  //   setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
-
-  // },[])
 
   const handleAddMember = () => {
     setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
   };
 
   return (
-    <FormContainer>
-      <FormTitle>Create New Project</FormTitle>
-      <StyledForm onSubmit={handleSubmit}>
+    <PageContainer>
 
-        <StyledInput
-          type="text"
-          name="projectName"
-          value={formData.projectName}
-          onChange={handleChange}
-          placeholder="Project Name"
-        />
+      <TopBar>
+        <BackButton onClick={handleGoBack}>
+          <ArrowBack /> Back
+        </BackButton>
+      </TopBar>
 
-        <StyledInput
-          type="text"
-          name="description"
-          placeholder="Project Description"
-          value={formData.description}
-          onChange={handleChange}
-        />
+      <FormContainer>
+        <FormTitle>
+          <Assignment style={{ marginRight: '10px' }} />
+          Create New Project
+        </FormTitle>
+        <StyledForm onSubmit={handleSubmit}>
 
-        {memberIds.map((memberId, index) => (
-          <MemberSelectionContainer key={index}>
-            <StyledSelect
-              value={memberId || ''}
-              onChange={handleMemberChange(index)}
-            >
-              <option value="">Select Member</option>
-              {membersList.map((member) => (
-                <option key={member.id} value={member.id}>
-                  {member.name}
-                </option>
-              ))}
-            </StyledSelect>
-            {index === memberIds.length - 1 && (
-              <InlineButton type="button" onClick={handleAddMember}>
-                Add Member
-              </InlineButton>
-            )}
-          </MemberSelectionContainer>
-        ))}
+          <StyledInput
+            type="text"
+            name="projectName"
+            value={formData.projectName}
+            onChange={handleChange}
+            placeholder="Project Name"
+          />
 
-        <StyledButton type="submit">Create Project</StyledButton>
-      </StyledForm>
-    </FormContainer>
+          <StyledInput
+            type="text"
+            name="description"
+            placeholder="Project Description"
+            value={formData.description}
+            onChange={handleChange}
+          />
+
+          {memberIds.map((memberId, index) => (
+            <MemberSelectionContainer key={index}>
+              <StyledSelect
+                value={memberId || ''}
+                onChange={handleMemberChange(index)}
+              >
+                <option value="">Select Member</option>
+                {membersList.map((member) => (
+                  <option key={member.id} value={member.id}>
+                    {member.name}
+                  </option>
+                ))}
+              </StyledSelect>
+
+              {index === memberIds.length - 1 && (
+                <InlineButton type="button" onClick={handleAddMember}>
+                  Add Member
+                </InlineButton>
+              )}
+            </MemberSelectionContainer>
+          ))}
+
+          <StyledButton type="submit">Create Project</StyledButton>
+        </StyledForm>
+      </FormContainer>
+    </PageContainer>
   );
 };
 
