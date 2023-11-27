@@ -74,7 +74,7 @@ jobs:
           working_directory: Backend/backendAcademic
       - run:
           name: Run Tests
-          command: npm test
+          command: npm test --detectOpenHandles
           working_directory: Backend/backendAcademic
 
 
