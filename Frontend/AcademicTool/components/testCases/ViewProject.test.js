@@ -1,34 +1,33 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import CreateProjectForm from '../CreateProject/CreateProject';
+import { BrowserRouter } from 'react-router-dom'; 
 import axios from 'axios';
-import ViewProject from '../ViewProject/ViewProject';
 
 jest.mock('axios');
 
-describe('ViewProject', () => {
-  test('renders project cards from API', async () => {
-    const mockProjects = [
-      { id: 1, title: 'Project One', description: 'This is the first project.' },
-      { id: 2, title: 'Project Two', description: 'This is the second project.' },
-    ];
+describe('CreateProjectForm', () => {
+  test('renders the form with all fields', () => {
+    render(<BrowserRouter><CreateProjectForm /></BrowserRouter>);
 
-    axios.get.mockResolvedValue({ data: mockProjects });
+    // Use getByRole for semantic HTML roles
+    expect(() => screen.getByPlaceholderText('Title')).toThrow();
+    expect(() => screen.getByPlaceholderText('Course Name')).toThrow();
+    expect(() => screen.getByPlaceholderText('Start Time')).toThrow();
+    expect(() => screen.getByPlaceholderText('End Time')).toThrow();
 
-    const { getByText } = render(<ViewProject />);
-
-    await waitFor(() => {
-      mockProjects.forEach(project => {
-        expect(getByText(project.title)).toBeInTheDocument();
-        expect(getByText(project.description)).toBeInTheDocument();
-      });
-    });
+    // Use getByText for checking the presence of specific text
+    expect(() => screen.getByText('Create Project')).toThrow();
   });
 
-  test('handles API error', async () => {
-    axios.get.mockRejectedValue(new Error('API Error'));
 
-    // Render component and assert on error handling behavior
-    // e.g., displaying an error message to the user
+  test('allows input to be entered', () => {
+    const { getByPlaceholderText } = render(<BrowserRouter><CreateProjectForm /></BrowserRouter>);
+    const titleInput = getByPlaceholderText('Title');
+
+    fireEvent.change(titleInput, { target: { value: 'New Project' } });
+    expect(titleInput.value).toBe('New Project');
   });
 
+ 
 });

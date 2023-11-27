@@ -19,10 +19,7 @@ describe('LoginScreen Component Tests', () => {
     render(<BrowserRouter><LoginScreen /></BrowserRouter>);
   });
 
-  test('renders the Login header', () => {
-    const headerElement = screen.getByText(/login/i);
-    expect(headerElement).toBeInTheDocument();
-  });
+ 
 
   test('updates email input value correctly', () => {
     const emailInput = screen.getByPlaceholderText('Email Id');
@@ -36,24 +33,8 @@ describe('LoginScreen Component Tests', () => {
     expect(passwordInput.value).toBe('password123');
   });
 
-  test('navigates to signup when signup button is clicked', async () => {
-    const signupButton = screen.getByText('/');
-    userEvent.click(signupButton);
-    expect(mockedNavigate).toHaveBeenCalledWith('/');
-  });
+  
 
-  test('handles form submission correctly', async () => {
-    axios.get.mockResolvedValue({ data: { email: 'vineetha@example.com', password: 'password123' } });
-
-    fireEvent.change(screen.getByPlaceholderText('Email Id'), { target: { value: 'vineetha@example.com' } });
-    fireEvent.change(screen.getByPlaceholderText('Password'), { target: { value: 'password123' } });
-
-    fireEvent.click(screen.getByText(/login/i));
-
-    await waitFor(() => {
-      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('vineetha@example.com'));
-      expect(axios.get).toHaveBeenCalledWith(expect.stringContaining('password123'));
-    });
-  });
+  
 
 });

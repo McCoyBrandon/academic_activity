@@ -3,7 +3,7 @@ module.exports = {
   
     // Transform JavaScript and JSX files using Babel
     transform: {
-      '^.+\\.(js|jsx)$': 'babel-jest',
+       "^.+\\.jsx?$": "babel-jest"
     },
     transformIgnorePatterns: [
       '/node_modules/',
