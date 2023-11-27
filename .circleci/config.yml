@@ -34,11 +34,11 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Frontend/AcademicTool/components
+          working_directory: Frontend/AcademicTool/
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Frontend/AcademicTool/components
+          working_directory: Frontend/AcademicTool/components/test
 
   backend-tests:
     machine:
@@ -49,11 +49,11 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Backend/backendAcademic
+          working_directory: Backend/backendAcademic/
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Backend/backendAcademic
+          working_directory: Backend/backendAcademic/test
 
   build_and_push:
     docker:
@@ -82,20 +82,20 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Frontend/AcademicTool/components/testCases
+          working_directory: Frontend/AcademicTool/
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Frontend/AcademicTool/components/testCases
+          working_directory: Frontend/AcademicTool/components/test
       # Back end
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Backend/backendAcademic
+          working_directory: Backend/backendAcademic/
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Backend/backendAcademic
+          working_directory: Backend/backendAcademic/test
       
       # After testing, push an image to the Docker Hub
       - run:
