@@ -167,7 +167,7 @@ app.put('/api/user/updateProjects', (request, response) => {
   const projectID = request.query.projectID;
 
   database.collection("UserProject").updateOne(
-      {"projectId":projectID}, // Define the filter to match the document(s) you want to update.
+      {"_id":projectID}, // Define the filter to match the document(s) you want to update.
       { $set: updatedData }, // Use $set to update specific fields with the new data.
       (error, result) => {
           if (error) {
@@ -351,8 +351,88 @@ app.get('/api/user/viewAllTasks', (request, response) => {
     );
 });
 
+//
+// Projects call functions
+//
+/* 
+Function: Create a project based on a provided name, and return the id.
+Return: Project's MondoDB _id
+*/
+app.post('/api/user/createReference', multer().none(), (request, response) => {
+  database.collection("References").countDocuments({}, (error, numofDocs) => {
+      if (error) {
+          console.error("Error counting documents:", error);
+          response.status(500).send("Internal Server Error");
+      } else {
+          const body = request.body;
 
+          database.collection("References").insertOne(body, (insertError) => {
+              if (insertError) {
+                  console.error("Error adding note:", insertError);
+                  response.status(500).send("Internal Server Error");
+              } else {
+                  console.log(body);
+                  response.json("Note added successfully");
+              }
+          });
+      }
+  });
+});
 
+/* 
+Function: Get a reference list based on a projectID, and return the array of ids.
+Return: References's in a MondoDB _id list
+*/
+app.get('/api/user/viewReferencesByProject', (request, response) => {
+  const ProjectID = request.query.ProjectID;
+  console.log(request.query.referenceID);
+  database.collection('References').find({"projectID": ProjectID}).toArray((error, result) => {
+    if (error) {
+      console.error('Error retrieving data from MongoDB:', error);
+      response.status(500).send('Internal Server Error');
+    } else {
+      // Send the result as a response
+      response.send(result);
+    }
+  });
+});
+
+app.delete('/api/user/deleteReferences', (request, response) =>{
+  const referenceID = request.query.referenceID;
+  console.log(request.query.referenceID);
+  database.collection("References").deleteOne({"_id":referenceID}, (error,result) =>
+  {
+      if (error) {
+          console.error('Error deleting data from MongoDB:',error);
+          response.status(500).send('Internal Server Error');
+      } else {
+          if (result.deletedCount === 0) {
+              response.status(400).send('Project not found');
+          } else {
+              response.status(200).send('Project deleted');
+          }
+      }
+  });
+});
+
+//this get request is for updateReferences the Reference
+app.put('/api/user/updateReferences', (request, response) => {
+  const updatedData = request.body;
+  const ReferenceID = request.query.ReferenceID;
+
+  database.collection("References").updateOne(
+      {"_id":ReferenceID}, // Define the filter to match the document(s) you want to update.
+      { $set: updatedData }, // Use $set to update specific fields with the new data.
+      (error, result) => {
+          if (error) {
+              console.error("Error updating note in MongoDB:", error);
+              response.status(500).send("Internal Server Error");
+          } else {
+              response.send("Note updated successfully");
+          }
+      }
+  );
+});
 
 
   module.exports = app;
