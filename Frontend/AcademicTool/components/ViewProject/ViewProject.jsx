@@ -48,8 +48,8 @@ const ViewProject = () => {
         {projects.length > 0 ? (
           projects.map(project => (
             <div key={project.id} className="project-card" onClick={() => { ProjectRedicrect(project) }}>
-              <h3>{project.projectName || 'No Title'}</h3>
-              <p>{project.description || 'No Description'}</p>
+              <h3 className='font-bold'>Project Name : {project.projectName || 'No Title'}</h3>
+              <p> <span className='font-bold'>Description</span> : {project.description || 'No Description'}</p>
               <p>{'Project Members'}</p>
               {project.members && project.members.length > 0 && (
                 <ul >
