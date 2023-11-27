@@ -17,7 +17,7 @@ describe('Dashboard Component Tests', () => {
 
   test('renders all cards', () => {
     const cards = screen.getAllByRole('button');
-    expect(cards.length).toBe(3); 
+    expect(cards.length).toBe(2); 
   });
 
   

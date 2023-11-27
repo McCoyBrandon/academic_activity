@@ -127,7 +127,7 @@ app.get('/api/user/viewAllProjects', (request, response) => {
     console.log(request.query.userID);
     database.collection('UserProjects').find({members: {
       $elemMatch: {
-        id: userID
+        row_id: userID
       }
     }
   }).toArray((error, result) => {

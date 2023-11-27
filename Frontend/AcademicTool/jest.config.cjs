@@ -11,7 +11,7 @@ module.exports = {
     ],
     moduleNameMapper: {
       '\\.(css|less|scss)$': '<rootDir>/mockCSS.js', // Use <rootDir> to refer to the project root
-      '\\.(png|jpg|jpeg|gif|svg)$': '<rootDir>/mockImage.js', 
+      '\\.(png|jpg|jpeg|gif|avif|svg)$': '<rootDir>/mockImage.js', 
     },
     testEnvironment: 'jsdom',
   
