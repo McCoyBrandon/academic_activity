@@ -152,8 +152,8 @@ const CreateProjectForm = () => {
 
       const currentUser={
         name:JSON.parse(localStorage.getItem("user_creds"))?.name,
-        row_id: JSON.parse(localStorage.getItem("user_creds"))?._id
-
+        row_id: JSON.parse(localStorage.getItem("user_creds"))?._id,
+        id:23
       }
       // console.log("test",membersPayload)
       membersPayload.push(currentUser);

@@ -122,7 +122,7 @@ const CreateReference = () => {
             // Sample API call (replace with actual endpoint)
             const response = await axios.post('http://localhost:5038/api/user/createReference', payload);
             console.log(response);
-            navigate('/projects/viewProjects'); // Navigate to the desired page after submission
+            navigate('/projects/viewProjects/reference/view'); // Navigate to the desired page after submission
         } catch (error) {
             console.error('Failed to create reference:', error);
         }
