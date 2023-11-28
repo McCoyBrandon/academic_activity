@@ -15,6 +15,8 @@ import ViewTask from '../components/Tasks/ViewTask';
 import ComingSoon from '../components/ComingSoon/ComingSoon';
 import EventCalendarComponent from '../components/Calender/Calender';
 import LandingPage from '../components/LandingPage';
+import CreateReference from '../components/References/AddReference';
+import ViewReferences from '../components/References/ViewReference';
 
 
 const Routers = () => {
@@ -31,6 +33,8 @@ const Routers = () => {
         <Route path="/projects/viewProjects" exact element={<ViewProject />} />
         <Route path="/projects/viewProjects/tasks" exact element={<Tasks />} />
         <Route path="/projects/viewProjects/tasks/create" exact element={<CreateTask />} />
+        <Route path="/projects/viewProjects/reference/create" exact element={<CreateReference />} />
+        <Route path="/projects/viewProjects/reference/view" exact element={<ViewReferences />} />
         <Route path="/projects/viewProjects/tasks/view" exact element={<ViewTask />} />
       </Routes>
     </Router>

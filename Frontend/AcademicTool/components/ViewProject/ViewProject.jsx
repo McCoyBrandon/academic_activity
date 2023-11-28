@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ViewProject.css';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 const ViewProject = () => {
   const [projects, setProjects] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get('http://localhost:5038/api/user/viewAllProjects');
-        console.log("response", response)
+        // console.log("response", response)
         const fetchedProjects = response.data && response.data ? response.data : [];
         setProjects(fetchedProjects);
       } catch (error) {
-        console.error("Error fetching projects:", error);
+        // console.error("Error fetching projects:", error);
       }
     };
 
@@ -24,11 +27,27 @@ const ViewProject = () => {
   }, []);
 
   const ProjectRedicrect = (project) => {
-    console.log("project1", project)
+    // console.log("project1", project)
     localStorage.setItem('projectDetails', JSON.stringify(project));
+    setSelectedProject(project);
+    setOpenDialog(true);
+  };
 
-    // localStorage.setItem("projectDetails", JSON.parse(project))
+
+  const handleDialogClose = () => {
+    setOpenDialog(false);
+  };
+
+  const handleAddReferences = () => {
+    handleDialogClose();
+    navigate("/projects/viewProjects/reference/create")
+
+  };
+
+  const handleAddTasks = () => {
+    handleDialogClose();
     navigate("/projects/viewProjects/tasks")
+
   };
 
   return (
@@ -61,13 +80,36 @@ const ViewProject = () => {
                   ))}
                 </ul>
               )}
-               {/* <p>View Tasks</p> */}
+              {/* <p>View Tasks</p> */}
             </div>
           ))
         ) : (
           <p>No projects found.</p>
         )}
       </div>
+
+
+      <Dialog open={openDialog} onClose={handleDialogClose} fullWidth maxWidth="sm">
+        <DialogTitle>
+          Project Actions
+          <IconButton onClick={handleDialogClose} style={{ position: 'absolute', right: '10px', top: '10px' }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          <p>Choose an action for the project: <span className='font-bold'>{selectedProject?.projectName}</span></p>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" color="primary" onClick={handleAddReferences} style={{ margin: '10px' }}>
+             References
+          </Button>
+          <Button variant="contained" color="primary" onClick={handleAddTasks} style={{ margin: '10px' }}>
+             Tasks
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+
     </>
   );
 };
