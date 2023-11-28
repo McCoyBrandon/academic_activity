@@ -256,9 +256,9 @@ app.get('/api/user/projectMember', (request, response) => {
 
 //this is get viewall tasks
 app.get('/api/user/viewAllTasks', (request, response) => {
-   
+  const projectID = request.query.projectID;
     //console.log(request.query.userId);
-    database.collection('ProjectTasks').find({"projectId":projectID}).toArray((error, result) => {
+    database.collection('ProjectTasks').find({"projectID":projectID}).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -286,9 +286,14 @@ app.get('/api/user/viewAllTasks', (request, response) => {
 
   //this is get view all tasks by person 
   app.get('/api/user/viewAllTasksByperson', (request, response) => {
-    const Assignedto = request.query.Assignedto;
+    const userID = request.query.userID;
     //console.log(request.query.userId);
-    database.collection('ProjectTasks').find({"assign":Assignedto}).toArray((error, result) => {
+    database.collection('ProjectTasks').find({members: {
+      $elemMatch: {
+        row_id: userID
+      }
+    }
+  }).toArray((error, result) => {
       if (error) {
         console.error('Error retrieving data from MongoDB:', error);
         response.status(500).send('Internal Server Error');

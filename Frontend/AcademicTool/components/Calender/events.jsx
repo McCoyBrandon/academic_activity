@@ -125,7 +125,7 @@ export default [
   },
   {
     id: 15,
-    title: "Point in Time Event",
+    title: "webpage",
     start: now,
     end: now
   },

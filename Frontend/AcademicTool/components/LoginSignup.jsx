@@ -65,7 +65,7 @@ const LoginSignup = () => {
               <div className="space-y-4">
                 <div className="mb-2">
                   <label htmlFor="universityId" className="text-sm font-medium text-gray-600">
-                    University ID
+                    Name
                   </label>
                   <input
                     className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
@@ -80,7 +80,7 @@ const LoginSignup = () => {
                 </div>
                 <div className="mb-2">
                   <label htmlFor="password" className="text-sm font-medium text-gray-600">
-                    Password
+                    Email
                   </label>
                   <input
                     className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
