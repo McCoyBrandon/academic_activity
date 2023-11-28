@@ -87,7 +87,7 @@ const Tasks = () => {
             <DashboardContainer>
                 {[
                     { title: 'Create New Task', img: projectCreate, path: '/projects/viewProjects/tasks/create' },
-                    { title: 'Vew My Tasks', img: projectView, path: '/projects/viewProjects/tasks/view' },
+                    { title: 'View My Tasks', img: projectView, path: '/projects/viewProjects/tasks/view' },
                     // { title: 'Make a Plan', img: PlanImg, path: '/plan' },
 
                 ].map((item) => (
