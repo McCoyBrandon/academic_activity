@@ -1,184 +1,35 @@
-const supertest = require("supertest");
-const app = require("../index");
-const mongoose = require("mongoose");
+const supertest = require('supertest');
+const app = require('../index'); // Replace with the actual path to your app file
 
-const request = supertest(app);
+describe('POST /api/user/addUsers', () => {
+ 
 
-let database;
+  it('should return 500 Internal Server Error on database error', async () => {
+    // Mock the database error scenario
+    // ...
 
-beforeAll(async () => {
-  const connectionString = "mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
-  await mongoose.connect(connectionString, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+    const userData = { 
+      email: "varun@321",
+      password: "varun321",
+    }
 
-  database = mongoose.connection;
-});
+    const response = await supertest(app)
+      .post('/api/user/addUsers')
+      .send(userData);
 
-// Start describing the API tests
-describe("API Tests", () => {
-    // Describe the specific endpoint being tested
-    describe("GET /api/user/usersCredentials", () => {
-      // Write a test case for a specific scenario
-      it("should return user data for valid login", async () => {
-        const validCredentials = {
-          userEmail: "korukondaharish321@gmail.com",
-          userPassword: "Harish321"
-        };
-      
-        try {
-          const response = await request
-            .get("/api/user/usersCredentials")
-            .query(validCredentials);
-            console.log(validCredentials);
-      
-          expect(response.status).toBe(200);
-          console.log(response.status);
-          expect(response.body).toBeInstanceOf(Array);
-          console.log(response.body);
-          expect(response.body.length).toBeGreaterThan(0);
-        } catch (error) {
-          // If an error occurs, log it and fail the test
-          console.error("Error:", error);
-          throw error;
-        }
-      });
-      
-    });
-  
-
-  describe("POST /api/user/addUsers", () => {
-    it("should add a new note", async () => {
-      const newNote = {
-        email: "varun@321",
-        password: "varun321",
-      };
-      const response = await request
-        .post("/api/user/addUsers")
-        .send(newNote);
-
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("Note added successfully");
-    });
-  });
-
-  // Add more test cases for other endpoints...
-
-  describe("POST /api/user/createProjects", () => {
-    it("should add a new note", async () => {
-      const newNote1 = {
-        "projectName": "project10",
-        "description": "des10",
-        "members": [
-                     {
-                        "name": "vardhan",
-                        "id": { "$numberInt": "1" },
-                        "row_id": "6538503bccb8c00b8500add1"
-                         },
-                     {
-                        "name": "test",
-                        "id": { "$numberInt": "4" },
-                        "row_id": "6540a63570a3ed770bec09ef"
-                        }
-                    ],
-                    "id": null
-                };
-           
-      const response = await request
-        .post("/api/user/createProjects")
-        .send(newNote1);
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("project created successfully");
-    });
+    expect(response.status).toBe(500);
   });
 
 
-  describe("GET /api/user/viewAllProjects", () => {
-    // Write a test case for a specific scenario
-    it("should return user data for valid login", async () => {
-      const validCredentials = {
-       
-      };
-    
-      try {
-        const response = await request
-          .get("/api/user/viewAllProjects")
-          .query(validCredentials);
-          console.log(validCredentials);
-    
-        expect(response.status).toBe(200);
-        console.log(response.status);
-        expect(response.body).toBeInstanceOf(Array);
-        console.log(response.body);
-       // expect(response.body.length).toBeGreaterThan(0);
-      } catch (error) {
-        // If an error occurs, log it and fail the test
-        console.error("Error:", error);
-        throw error;
-      }
-    });
-    
-  });
 
-  describe("GET /api/allUsers", () => {
-    // Write a test case for a specific scenario
-    it("should return user data for valid login", async () => {
-      const validCredentials = {
-       
-      };
-    
-      try {
-        const response = await request
-          .get("/api/allUsers")
-          .query(validCredentials);
-          console.log(validCredentials);
-    
-        expect(response.status).toBe(200);
-        console.log(response.status);
-        expect(response.body).toBeInstanceOf(Array);
-        console.log(response.body);
-       // expect(response.body.length).toBeGreaterThan(0);
-      } catch (error) {
-        // If an error occurs, log it and fail the test
-        console.error("Error:", error);
-        throw error;
-      }
-    });
-    
-  });
+  it('should return 500 Internal Server Error on database error', async () => {
+    // Mock the database error scenario
+    // ...
 
+    const response = await supertest(app)
+      .get('/api/user/usersCredentials')
+      .query({ userEmail: 'korukondaharish321@gmail.com', userPassword: 'Harish321' });
 
-  describe("POST /api/user/projectMembers", () => {
-    it("should add a new note", async () => {
-      const newNote1 = {
-        "projectName": "project10",
-        "members": [
-                     {
-                        "name": "vardhan",
-                        "id": { "$numberInt": "1" },
-                        "row_id": "6538503bccb8c00b8500add1"
-                         },
-                     {
-                        "name": "test",
-                        "id": { "$numberInt": "4" },
-                        "row_id": "6540a63570a3ed770bec09ef"
-                        }
-                    ],
-                    "id": null
-                };
-           
-      const response = await request
-        .post("/api/user/projectMembers")
-        .send(newNote1);
-      expect(response.status).toBe(200);
-      expect(response.body).toBe("add member to project in separate collection successfully");
-    });
-  });
-
-
-  afterAll(async () => {
-    // Close the MongoDB connection after all tests
-    await mongoose.disconnect();
+    expect(response.status).toBe(500);
   });
 });

@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const multer = require('multer');
 const { default: mongoose } = require("mongoose");
+const { ObjectId } = require('mongodb');
 
 const app = express();
 app.use(cors());
@@ -318,7 +319,7 @@ app.get('/api/user/viewAllTasks', (request, response) => {
   app.delete('/api/user/userDeleteTask', (request, response) => {
     const taskID = request.query.taskID;
   
-    database.collection('ProjectTasks').deleteOne({"_id":taskID}, (error, result) => {
+    database.collection('ProjectTasks').deleteOne({"_id":ObjectId(taskID)}, (error, result) => {
       if (error) {
         console.error('Error deleting data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -338,7 +339,7 @@ app.get('/api/user/viewAllTasks', (request, response) => {
     const taskID = request.query.taskID;
 
     database.collection("ProjectTasks").updateOne(
-        {"_id":taskID}, // Define the filter to match the document(s) you want to update.
+      {"_id":ObjectId(taskID)}, // Define the filter to match the document(s) you want to update.
         { $set: updatedData }, // Use $set to update specific fields with the new data.
         (error, result) => {
             if (error) {
