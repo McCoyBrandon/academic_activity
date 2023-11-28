@@ -101,10 +101,12 @@ const CreateTask = () => {
 
 
     useEffect(() => {
-        const storedProjectDetails = localStorage.getItem('projectDetails');
+        const storedProjectDetails = localStorage.getItem('projectDetails')?localStorage.getItem('projectDetails'):{};
         if (storedProjectDetails) {
             setProjectDetails(JSON.parse(storedProjectDetails));
+            setMembersList((JSON.parse(storedProjectDetails)?.members))
         }
+        console.log("membersList",membersList)
     }, []);
 
 
@@ -124,21 +126,22 @@ const CreateTask = () => {
         try {
 
             let membersPayload = memberIds.map(id => membersList.find(member => member.id === id));
-            const currentUser = {
-                name: JSON.parse(localStorage.getItem("user_creds"))?.name,
-                row_id: JSON.parse(localStorage.getItem("user_creds"))?._id
+            // const currentUser = {
+            //     name: JSON.parse(localStorage.getItem("user_creds"))?.name,
+            //     row_id: JSON.parse(localStorage.getItem("user_creds"))?._id
 
-            }
-            membersPayload.push(currentUser);
+            // }
+            // membersPayload.push(currentUser);
             const response = await axios.post('http://localhost:5038/api/user/createTasks', {
                 ...formData,
                 members: membersPayload,
                 startDate: formData.startDate,
                 endDate: formData.endDate,
-                projectID: projectDetails?._id
+                projectID: projectDetails?._id,
+                status:"In-Progress"
             });
 
-            history('/projects/viewProjects');
+            navigate('/projects/viewProjects/tasks/view');
         } catch (error) {
             console.error('Failed to create project:', error);
         }
@@ -169,7 +172,7 @@ const CreateTask = () => {
                     id: index,
                     row_id: member._id,
                 }));
-                setMembersList(modifiedMembers);
+                // setMembersList(modifiedMembers);
             } catch (error) {
             }
         }
@@ -238,14 +241,14 @@ const CreateTask = () => {
                             placeholder="End Date"
                         />
 
-                        {memberIds.map((memberId, index) => (
+                        {memberIds?.map((memberId, index) => (
                             <MemberSelectionContainer key={index}>
                                 <StyledSelect
                                     value={memberId || ''}
                                     onChange={handleMemberChange(index)}
                                 >
                                     <option value="">Select Member</option>
-                                    {membersList.map((member) => (
+                                    {membersList?.map((member) => (
                                         <option key={member.id} value={member.id}>
                                             {member.name}
                                         </option>
