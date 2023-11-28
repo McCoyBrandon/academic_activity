@@ -4,34 +4,45 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
+import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
 
+// Animations
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(-20px); }
   to { opacity: 1; transform: translateY(0); }
 `;
-const FormContainer = styled('div')({
-    background: 'linear-gradient(45deg, #6DD5FA, #FF758C)',
-    padding: '40px',
-    borderRadius: '15px',
-    boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
-    maxWidth: '400px',
-    margin: 'auto',
-    marginTop: '50px',
+
+// Styled Components
+const PageContainer = styled('div')({
+  minHeight: '100vh',
+  background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  padding: '20px',
 });
 
-const pulseAnimation = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-`;
+const FormContainer = styled('div')({
+  background: 'white',
+  padding: '40px',
+  borderRadius: '15px',
+  boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+  width: '450px',
+  margin: 'auto',
+  marginTop: '20px',
+  animation: `${fadeIn} 1s ease-out`,
+});
 
 const FormTitle = styled('h2')({
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: '30px',
-    animation: `${pulseAnimation} 2s infinite`,
+  color: '#333',
+  textAlign: 'center',
+  marginBottom: '30px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '10px',
 });
-
 const StyledForm = styled('form')({
     display: 'flex',
     flexDirection: 'column',
@@ -39,65 +50,55 @@ const StyledForm = styled('form')({
 });
 
 const StyledInput = styled('input')({
-    padding: '10px',
-    borderRadius: '5px',
-    border: 'none',
+    padding: '15px',
+    borderRadius: '8px',
+    border: '1px solid #ced4da',
     outline: 'none',
-    background: '#FFFFFF',
-    color: '#000000',
+    width: '100%', // Increased width
     '&::placeholder': {
-        color: '#000000',
-        opacity: 1
+        color: '#adb5bd',
     },
     '&:focus': {
-        boxShadow: '0 0 0 2px #FF758C',
+        boxShadow: '0 0 0 2px #3498db',
     },
 });
+
 const StyledButton = styled('button')({
-    padding: '10px 20px',
-    borderRadius: '5px',
+    padding: '15px 20px',
+    borderRadius: '8px',
     border: 'none',
     cursor: 'pointer',
-    backgroundColor: '#fff',
-    color: '#6DD5FA',
+    backgroundColor: '#3498db',
+    color: '#ffffff',
     fontWeight: 'bold',
     '&:hover': {
-        backgroundColor: '#FF758C',
+        backgroundColor: '#2980b9',
     },
 });
 
 const StyledSelect = styled('select')({
-    padding: '10px',
-    borderRadius: '5px',
-    border: 'none',
+    padding: '15px',
+    borderRadius: '8px',
+    border: '1px solid #ced4da',
     outline: 'none',
-    background: '#FFFFFF',
-    color: '#000000',
-    marginBottom: '10px',
+    '&:focus': {
+        boxShadow: '0 0 0 2px #3498db',
+    },
 });
 
 const MemberSelectionContainer = styled('div')({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: '10px',
 });
 
-const InlineButton = styled(StyledButton)({
-    marginLeft: '10px',
-    flexGrow: 0,
-});
-
-const membersList = [
-    { id: 1, name: 'Vineetha' },
-    { id: 2, name: 'Harish' },
-    { id: 3, name: 'Brandon' },
-];
 
 const CreateTask = () => {
 
     const [projectDetails, setProjectDetails] = useState({});
     const navigate = useNavigate();
+    const [membersList, setMembersList] = useState([]);
+
 
     useEffect(() => {
         const storedProjectDetails = localStorage.getItem('projectDetails');
@@ -121,12 +122,20 @@ const CreateTask = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5038/api/user/createTask', {
+
+            let membersPayload = memberIds.map(id => membersList.find(member => member.id === id));
+            const currentUser = {
+                name: JSON.parse(localStorage.getItem("user_creds"))?.name,
+                row_id: JSON.parse(localStorage.getItem("user_creds"))?._id
+
+            }
+            membersPayload.push(currentUser);
+            const response = await axios.post('http://localhost:5038/api/user/createTasks', {
                 ...formData,
-                members: memberIds.map(id => membersList.find(member => member.id === id)),
+                members: membersPayload,
                 startDate: formData.startDate,
                 endDate: formData.endDate,
-                id: projectDetails?._id
+                projectID: projectDetails?._id
             });
 
             history('/projects/viewProjects');
@@ -150,14 +159,31 @@ const CreateTask = () => {
         setMemberIds((currentMemberIds) => [...currentMemberIds, null]);
     };
 
+    useEffect(() => {
+        async function fetchMembers() {
+            try {
+                const response = await axios.get('http://localhost:5038/api/allUsers');
+                const filteredMembers = response.data.filter((member) => member.name && member._id);
+                const modifiedMembers = filteredMembers.map((member, index) => ({
+                    name: member.name,
+                    id: index,
+                    row_id: member._id,
+                }));
+                setMembersList(modifiedMembers);
+            } catch (error) {
+            }
+        }
+        fetchMembers();
+    }, []);
+
     return (
         <>
-        <div style={{ display: "flex",justifyContent:"space-between" ,color:'black',padding:"10px"}}>
+            <div style={{ display: "flex", justifyContent: "space-between", color: 'black', padding: "10px" }}>
                 <div>
-                    {projectDetails.projectName && ( // Conditional rendering to display this section only if project name exists
-                        <div>
-                            <h2>Project Name: {projectDetails.projectName}</h2>
-                            <p>Description: {projectDetails.description}</p>
+                    {projectDetails.projectName && (
+                        <div className='font-bold'>
+                            <h2>Project Name : {projectDetails.projectName}</h2>
+                            <p>Description : {projectDetails.description}</p>
                         </div>
                     )}
                 </div>
@@ -165,81 +191,78 @@ const CreateTask = () => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => navigate('/projects/viewProjects')} // Replace '/dashboard' with the actual path to your dashboard
+                        onClick={() => navigate('/projects/viewProjects')}
                     >
                         Go to Projects
                     </Button>
                 </div>
             </div>
+            < PageContainer>
 
-            {/* <div style={{color:'black',padding:"10px"}}>
-                {projectDetails.projectName && ( 
-                    <div>
-                        <h2 >Project Name : {projectDetails.projectName}</h2>
-                        <p>Description : {projectDetails.description}</p>
-                    </div>
-                )}
-            </div> */}
-            <FormContainer>
-                <FormTitle>Create New Task</FormTitle>
-                <StyledForm onSubmit={handleSubmit}>
+                <FormContainer>
+                    <FormTitle>
+                        <Assignment style={{ marginRight: '10px' }} />
+                        Create New Task under <span className='font-bold'>{projectDetails.projectName} </span>Project
+                    </FormTitle>
+                    <StyledForm onSubmit={handleSubmit}>
 
-                    <StyledInput
-                        type="text"
-                        name="projectName"
-                        value={formData.projectName}
-                        onChange={handleChange}
-                        placeholder="Task Name"
-                    />
+                        <StyledInput
+                            type="text"
+                            name="projectName"
+                            value={formData.projectName}
+                            onChange={handleChange}
+                            placeholder="Task Name"
+                        />
 
-                    <StyledInput
-                        type="text"
-                        name="description"
-                        placeholder="Task Description"
-                        value={formData.description}
-                        onChange={handleChange}
-                    />
+                        <StyledInput
+                            type="text"
+                            name="description"
+                            placeholder="Task Description"
+                            value={formData.description}
+                            onChange={handleChange}
+                        />
 
-                    <StyledInput
-                        type="date"
-                        name="startDate"
-                        value={formData.startDate}
-                        onChange={handleChange}
-                        placeholder="Start Date"
-                    />
+                        <StyledInput
+                            type="date"
+                            name="startDate"
+                            value={formData.startDate}
+                            onChange={handleChange}
+                            placeholder="Start Date"
+                        />
 
-                    <StyledInput
-                        type="date"
-                        name="endDate"
-                        value={formData.endDate}
-                        onChange={handleChange}
-                        placeholder="End Date"
-                    />
+                        <StyledInput
+                            type="date"
+                            name="endDate"
+                            value={formData.endDate}
+                            onChange={handleChange}
+                            placeholder="End Date"
+                        />
 
-                    {memberIds.map((memberId, index) => (
-                        <MemberSelectionContainer key={index}>
-                            <StyledSelect
-                                value={memberId || ''}
-                                onChange={handleMemberChange(index)}
-                            >
-                                <option value="">Select Member</option>
-                                {membersList.map((member) => (
-                                    <option key={member.id} value={member.id}>
-                                        {member.name}
-                                    </option>
-                                ))}
-                            </StyledSelect>
-                            {index === memberIds.length - 1 && (
+                        {memberIds.map((memberId, index) => (
+                            <MemberSelectionContainer key={index}>
+                                <StyledSelect
+                                    value={memberId || ''}
+                                    onChange={handleMemberChange(index)}
+                                >
+                                    <option value="">Select Member</option>
+                                    {membersList.map((member) => (
+                                        <option key={member.id} value={member.id}>
+                                            {member.name}
+                                        </option>
+                                    ))}
+                                </StyledSelect>
+                                {/* {index === memberIds.length - 1 && (
                                 <InlineButton type="button" onClick={handleAddMember}>
                                     Add Member
                                 </InlineButton>
-                            )}
-                        </MemberSelectionContainer>
-                    ))}
+                            )} */}
+                            </MemberSelectionContainer>
+                        ))}
 
-                    <StyledButton type="submit">Create Task</StyledButton>
-                </StyledForm>
-            </FormContainer>
+                        <StyledButton type="submit">Create Task</StyledButton>
+                    </StyledForm>
+                </FormContainer>
+            </PageContainer>
         </>
     );
 };

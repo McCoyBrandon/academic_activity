@@ -68,9 +68,9 @@ const Tasks = () => {
             <div style={{ display: "flex",justifyContent:"space-between" }}>
                 <div>
                     {projectDetails.projectName && ( // Conditional rendering to display this section only if project name exists
-                        <div>
-                            <h2>Project Name: {projectDetails.projectName}</h2>
-                            <p>Description: {projectDetails.description}</p>
+                        <div className='font-bold'>
+                            <h2>Project Name : {projectDetails.projectName}</h2>
+                            <p>Description : {projectDetails.description}</p>
                         </div>
                     )}
                 </div>
