@@ -249,8 +249,8 @@ const CreateTask = () => {
                                 >
                                     <option value="">Select Member</option>
                                     {membersList?.map((member) => (
-                                        <option key={member.id} value={member.id}>
-                                            {member.name}
+                                        <option key={member?.id} value={member?.id}>
+                                            {member?.name}
                                         </option>
                                     ))}
                                 </StyledSelect>
