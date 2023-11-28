@@ -12,9 +12,10 @@ const ViewProject = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const userId=JSON.parse(localStorage.getItem("user_creds"))?._id
     const fetchProjects = async () => {
       try {
-        const response = await axios.get('http://localhost:5038/api/user/viewAllProjects');
+        const response = await axios.get(`http://localhost:5038/api/user/viewAllProjects?userID=${userId}`);
         // console.log("response", response)
         const fetchedProjects = response.data && response.data ? response.data : [];
         setProjects(fetchedProjects);
@@ -40,7 +41,7 @@ const ViewProject = () => {
 
   const handleAddReferences = () => {
     handleDialogClose();
-    navigate("/projects/viewProjects/reference/create")
+    navigate("/projects/viewProjects/reference")
 
   };
 
