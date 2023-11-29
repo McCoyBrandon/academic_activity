@@ -4,6 +4,7 @@ import './ViewProject.css';
 import { useNavigate } from 'react-router-dom';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const ViewProject = () => {
   const [projects, setProjects] = useState([]);
@@ -12,7 +13,7 @@ const ViewProject = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userId=JSON.parse(localStorage.getItem("user_creds"))?._id
+    const userId = JSON.parse(localStorage.getItem("user_creds"))?._id
     const fetchProjects = async () => {
       try {
         const response = await axios.get(`http://localhost:5038/api/user/viewAllProjects?userID=${userId}`);
@@ -51,6 +52,19 @@ const ViewProject = () => {
 
   };
 
+  const handleDeleteProject = async (projectId) => {
+    try {
+      await axios.delete(`http://localhost:5038/api/user/deleteProject?projectID=${projectId}`);
+      // After deleting the project, refresh the project list
+      const userId = JSON.parse(localStorage.getItem("user_creds"))?._id;
+      const response = await axios.get(`http://localhost:5038/api/user/viewAllProjects?userID=${userId}`);
+      const fetchedProjects = response.data && response.data ? response.data : [];
+      setProjects(fetchedProjects);
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    }
+  };
+
   return (
     <>
       <div className='main-projects-view'>
@@ -81,7 +95,22 @@ const ViewProject = () => {
                   ))}
                 </ul>
               )}
-              {/* <p>View Tasks</p> */}
+              <DeleteIcon
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click event propagation to parent
+                  handleDeleteProject(project._id);
+                }} style={{ cursor: 'pointer' }}
+              />
+              {/* <Button
+                variant="contained"
+                color="secondary"
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click event propagation to parent
+                  handleDeleteProject(project._id);
+                }}
+              >
+                Delete Project
+              </Button> */}
             </div>
           ))
         ) : (
@@ -102,10 +131,10 @@ const ViewProject = () => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" color="primary" onClick={handleAddReferences} style={{ margin: '10px' }}>
-             References
+            References
           </Button>
           <Button variant="contained" color="primary" onClick={handleAddTasks} style={{ margin: '10px' }}>
-             Tasks
+            Tasks
           </Button>
         </DialogActions>
       </Dialog>
