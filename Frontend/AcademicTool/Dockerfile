@@ -5,10 +5,10 @@ FROM node:14-alpine
 WORKDIR /usr/src/app
 
 # Create a directory for the app
-RUN  /usr/src/app
+RUN mkdir -p /usr/src/app/AcademicTool
 
 # Set the working directory to the React app
-WORKDIR /usr/src/app
+WORKDIR /usr/src/app/AcademicTool
 
 # Copy package.json and package-lock.json to the working directory
 COPY Frontend/AcademicTool/package*.json ./
@@ -17,7 +17,7 @@ COPY Frontend/AcademicTool/package*.json ./
 RUN npm install
 
 # Copy the application code to the working directory
-COPY . ./
+COPY . /.
 
 # Build the React app (replace 'npm run' with the actual build script)
 RUN npm run 
