@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import email_icon from './Assets/email.png';
 import password_icon from './Assets/password.png';
 import interview from "../src/assets/academic_activity.jpeg"
+import { toast } from "react-toastify";
 
 const LoginScreen = () => {
   const [formData, setFormData] = useState({
@@ -47,6 +48,7 @@ const LoginScreen = () => {
           localStorage.setItem("email", formData?.email);
           localStorage.setItem("password", formData?.password)
           localStorage.setItem("user_creds",JSON.stringify(response.data[0]))
+          toast.success("logged In");
           navigateTo("/dashboard");
 
         } else {

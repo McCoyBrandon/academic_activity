@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from "react-toastify";
 
 const ViewTask = () => {
   const [projects, setProjects] = useState([]);
@@ -44,6 +45,7 @@ const ViewTask = () => {
   const handleDeleteTask = async (taskId) => {
     try {
       await axios.delete(`http://localhost:5038/api/user/userDeleteTask?taskID=${taskId}`);
+      toast.success("Task Deleted");
       const response = await axios.get(`http://localhost:5038/api/user/viewAllTasks?projectID=${projectDetails?._id}`);
       const fetchedProjects = response.data && response.data ? response.data : [];
       setProjects(fetchedProjects);
@@ -58,6 +60,7 @@ const ViewTask = () => {
       await axios.put(`http://localhost:5038/api/user/updateTasks?taskID=${taskId}`, {
         status: newStatus, // Set the new status
       });
+      toast.success("Status Updated");
   
       // After updating the status, refresh the task list
       const response = await axios.get(`http://localhost:5038/api/user/viewAllTasks?projectID=${projectDetails?._id}`);
@@ -106,20 +109,20 @@ const ViewTask = () => {
       <div className="project-container">
         {projects.length > 0 ? (
           projects.map((project) => (
-            <div key={project.id} className="project-card">
+            <div key={project?.id} className="project-card">
               <div className='flex font-bold'>
-              <h3>{project.projectName || 'No Title'} -> </h3>
-              <div className="pl-2 font-bold" style={{ color: getStatusColor(project.status) }}>
-                  {project.status}
+              <h3>{project?.projectName || 'No Title'} -> </h3>
+              <div className="pl-2 font-bold" style={{ color: getStatusColor(project?.status) }}>
+                  {project?.status}
               </div>
               </div>
               
               <p>{project.description || 'No Description'}</p>
               <p>{'Project Members'}</p>
-              {project.members && project.members.length > 0 && (
+              {project.members && project.members?.length > 0 && (
                 <ul>
                   {project.members.map((task, index) => (
-                    <li key={index}>{task.name || 'Unnamed Task'}</li>
+                    <li key={index}>{task?.name || 'Unnamed Task'}</li>
                   ))}
                 </ul>
               )}
@@ -145,7 +148,7 @@ const ViewTask = () => {
             </div>
           ))
         ) : (
-          <p>No projects found.</p>
+          <p>No Tasks found.</p>
         )}
       </div>
     </>

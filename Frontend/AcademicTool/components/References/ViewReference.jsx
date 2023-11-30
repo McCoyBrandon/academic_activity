@@ -3,6 +3,7 @@ import axios from 'axios';
 import "../ViewProject/ViewProject.css";
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const ViewReferences = () => {
     const navigate = useNavigate();
@@ -44,6 +45,7 @@ const ViewReferences = () => {
         try {
           await axios.delete(`http://localhost:5038/api/user/deleteReferences?referenceID=${referenceId}`);
           // After deleting the reference, refresh the reference list
+          toast.success("Reference Deleted");
           const response = await axios.get(`http://localhost:5038/api/user/viewReferencesByProject?ProjectID=${projectDetails?._id}`);
           const fetchedReferences = response.data ? response.data : [];
           setReferences(fetchedReferences);

@@ -4,6 +4,8 @@ import Routers from './routers';
 import { useEffect, useState } from "react";
 import axios from 'axios';
 import Loader from "./Loader";
+import { Slide, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
 
@@ -40,7 +42,22 @@ const App = () => {
     {isLoading && (
       <Loader />
     )}
+    <>
     <Routers />
+    <ToastContainer
+        transition={Slide}
+        autoClose={2000}
+        position="top-right"
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+      </>
     
   </>
   );

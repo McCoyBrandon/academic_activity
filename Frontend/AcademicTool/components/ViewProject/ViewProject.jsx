@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from "react-toastify";
 
 const ViewProject = () => {
   const [projects, setProjects] = useState([]);
@@ -56,6 +57,7 @@ const ViewProject = () => {
     try {
       await axios.delete(`http://localhost:5038/api/user/deleteProject?projectID=${projectId}`);
       // After deleting the project, refresh the project list
+      toast.success("Project Deleted");
       const userId = JSON.parse(localStorage.getItem("user_creds"))?._id;
       const response = await axios.get(`http://localhost:5038/api/user/viewAllProjects?userID=${userId}`);
       const fetchedProjects = response.data && response.data ? response.data : [];
