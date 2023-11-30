@@ -11,7 +11,10 @@ RUN mkdir -p /usr/src/app/AcademicTool
 WORKDIR /usr/src/app/AcademicTool
 
 # Copy package.json and package-lock.json to the working directory
-COPY Frontend/AcademicTool/package*.json ./
+COPY Frontend/AcademicTool/package.json ./
+
+# Copy package.json and package-lock.json to the working directory
+COPY Frontend/AcademicTool/package-lock.json ./
 
 # Install the application dependencies
 RUN npm install
