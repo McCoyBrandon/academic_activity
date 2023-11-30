@@ -20,7 +20,7 @@ RUN npm install
 COPY Frontend/AcademicTool/ .
 
 # Build the React app (replace 'npm run' with the actual build script)
-RUN npm run build
+RUN npm run 
 
 # Expose the port that the app will run on
 EXPOSE 3000
