@@ -1,85 +1,73 @@
-# # Use the latest 2.1 version of CircleCI pipeline process engine.
-# # See: https://circleci.com/docs/configuration-reference
-# version: 2.1
-
-# orbs:
-#   #jira: circleci/jira@2.1.0
-#   #newman: postman/newman@1.0.0
-#   #node: circleci/node@5.1.0
-#   #docker: circleci/docker@2.4.0
-
-# # Define a job to be invoked later in a workflow.
-# # See: https://circleci.com/docs/configuration-reference/#jobs
-# jobs:
-#   # Setting up MongoDB connection test. 
-#   db_tests:
-#     docker:
-#       - image: cimg/base:stable
-#     steps:
-#       - checkout
-#       - run: "npm test -- tests/"
-#         #name: "Test MongoDB Connection and Objects"
-#         #command: "npm test -- tests/"
-
-
-#   # This was included as an example. Left for easy references and as an example.
-#   say-hello:
-#     # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
-#     # See: https://circleci.com/docs/configuration-reference/#executor-job
-#     docker:
-#       - image: cimg/base:stable
-#     # Add steps to the job
-#     # See: https://circleci.com/docs/configuration-reference/#steps
-#     steps:
-#       - checkout
-#       - run:
-#           name: "Say hello"
-#           command: "echo Hello, World!"
-
-# # Orchestrate jobs using workflows
-# # See: https://circleci.com/docs/configuration-reference/#workflows
-# workflows:
-#   startup-workflow:
-#     jobs:
-#       - db_tests
-#       - say-hello
-
 version: 2.1
 
 jobs:
-  frontend-tests:
-    machine:
-      image: ubuntu-2204:2022.07.1
-
+  build-and-push-frontend:
+    docker:
+      - image: docker:stable
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Install Dependencies
-          command: npm install
-          working_directory: Frontend/AcademicTool/components
+          name: "Build Frontend Docker Image"
+          command: |
+            docker build -t harish492/frontend-image:latest -f Frontend/AcademicTool/Dockerfile .
       - run:
-          name: Run Tests
-          command: npm test
-          working_directory: Frontend/AcademicTool/components
+          name: "Save Frontend Image"
+          command: |
+            docker save -o frontend-image.tar harish492/frontend-image:latest
+      - run:
+          name: "Load and Push Frontend Image"
+          command: |
+            docker load -i frontend-image.tar
+            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+            docker push harish492/frontend-image:latest
 
-  backend-tests:
-    machine:
-      image: ubuntu-2204:2022.07.1
-
+  build-and-push-backend:
+    docker:
+      - image: docker:stable
     steps:
       - checkout
+      - setup_remote_docker
       - run:
-          name: Install Dependencies
-          command: npm install
-          working_directory: Backend/backendAcademic
+          name: "Build Backend Docker Image"
+          command: |
+            docker build -t harish492/backend-image:latest -f Backend/backendAcademic/Dockerfile .
       - run:
-          name: Run Tests
-          command: npm test 
-          working_directory: Backend/backendAcademic
-
+          name: "Save Backend Image"
+          command: |
+            docker save -o backend-image.tar harish492/backend-image:latest
+      - run:
+          name: "Load and Push Backend Image"
+          command: |
+            # docker load -i backend-image.tar
+            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+            docker push harish492/backend-image:latest
 
 workflows:
+  version: 2
   Setup_and_Test:
     jobs:
-      - frontend-tests
-      - backend-tests
+      - frontend-tests:
+          filters:
+            branches:
+              only:
+                - DockerHarry1
+      - backend-tests:
+          filters:
+            branches:
+              only:
+                - DockerHarry1
+      - build-and-push-frontend:
+          requires:
+            - frontend-tests
+          filters:
+            branches:
+              only:
+                - DockerHarry1
+      - build-and-push-backend:
+          requires:
+            - backend-tests
+          filters:
+            branches:
+              only:
+                - DockerHarry1
