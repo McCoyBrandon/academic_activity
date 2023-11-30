@@ -62,7 +62,7 @@ jobs:
           command: npm test
           working_directory: Frontend/AcademicTool/components
 
-           - run:
+      - run:
           name: "Build Frontend Docker Image"
           command: |
             docker build -t harish492/frontend-image:latest -f Frontend/AcademicTool/Dockerfile .
