@@ -4,14 +4,14 @@ services:
   frontend:
     image: harish492/frontend-image:latest
     ports:
-      - "85:85"
+      - "3000:3000"
     networks:
       - my-network
 
   backend:
     image: harish492/backend-image:latest
     ports:
-      - "3001:3001"
+      - "8080:8080"
     networks:
       - my-network
 
