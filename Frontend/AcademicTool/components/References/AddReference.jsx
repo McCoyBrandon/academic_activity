@@ -5,6 +5,7 @@ import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ArrowBack, GroupAdd, Description, Assignment, Link as LinkIcon } from '@mui/icons-material';
+import { toast } from "react-toastify";
 
 // Animations
 const fadeIn = keyframes`
@@ -122,6 +123,7 @@ const CreateReference = () => {
             // Sample API call (replace with actual endpoint)
             const response = await axios.post('http://localhost:5038/api/user/createReference', payload);
             console.log(response);
+            toast.success("Reference Created");
             navigate('/projects/viewProjects/reference/view'); // Navigate to the desired page after submission
         } catch (error) {
             console.error('Failed to create reference:', error);

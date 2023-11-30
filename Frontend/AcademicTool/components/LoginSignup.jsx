@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import email_icon from './Assets/email.png';
 import password_icon from './Assets/password.png';
 import interview from "../src/assets/academic_activity.jpeg"
+import { toast } from "react-toastify";
 
 const LoginSignup = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,9 @@ const LoginSignup = () => {
     email: '',
     password: '',
   });
+
+  const [emailError, setEmailError] = useState(''); // State to hold email validation error message
+  const [passwordError, setPasswordError] = useState(''); // State to hold password validation error message
   const navigateTo = useNavigate();
   const handleSubmit = (e) => {
 
@@ -26,6 +30,7 @@ const LoginSignup = () => {
     axios.post('http://localhost:5038/api/user/addUsers', pageData)
       .then(res => {
         console.log('Response data:', res.data);
+        toast.success("User Created Successfully .. Now please login");
         navigateTo("/loginScreen");
       })
       .catch(err => console.log('Error:', err));
@@ -46,6 +51,47 @@ const LoginSignup = () => {
         password: formData.password,
       };
       console.log('Signup data:', signupData);
+    }
+  };
+
+  const isValidEmail = (email) => {
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return emailPattern.test(email);
+  };
+
+  const isValidPassword = (password) => {
+    // Password validation logic
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{6,}$/;
+    return passwordPattern.test(password);
+  };
+
+  const handlePasswordChange = (e) => {
+    const passwordValue = e.target.value;
+    setFormData({
+      ...formData,
+      password: passwordValue,
+    });
+
+    // Password validation
+    if (!isValidPassword(passwordValue)) {
+      setPasswordError('Password must have at least 6 characters, one uppercase letter, one lowercase letter, one digit, and one special character.');
+    } else {
+      setPasswordError('');
+    }
+  };
+
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setFormData({
+      ...formData,
+      email: emailValue,
+    });
+
+    // Email validation
+    if (!isValidEmail(emailValue)) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
     }
   };
 
@@ -91,8 +137,10 @@ const LoginSignup = () => {
                     type='email'
                     placeholder='Email Id'
                     value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    onChange={handleEmailChange}
                   />
+                  {emailError && <p className="text-red-500 text-sm">{emailError}</p>}
+
                 </div>
                 <div className="mb-2">
                   <label htmlFor="password" className="text-sm font-medium text-gray-600">
@@ -102,16 +150,25 @@ const LoginSignup = () => {
                     className="mt-2 w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-400"
                     id="password"
                     name="password"
-
-
                     type='password'
                     placeholder='Password'
                     value={formData.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onChange={handlePasswordChange} // Use the password change handler
                   />
+                  {passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}
                 </div>
               </div>
+
               <div className="mt-4">
+                <button
+                  className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+                  onClick={handleSubmit}
+                >
+                  Signup
+                </button>
+              </div>
+
+              {/* <div className="mt-4">
                 <button
                   className="w-full bg-blue-500 text-white rounded-md py-2 px-4 hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
                   // onClick={() => {
@@ -130,11 +187,11 @@ const LoginSignup = () => {
 
                   signup
                 </button>
-              </div>
+              </div> */}
 
               <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
                 <div className="flex items-center justify-center">
-                  <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome, Students!</h2>
+                  <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome!</h2>
                   <Link to={"/loginScreen"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
                     Login Here!
                   </Link>
