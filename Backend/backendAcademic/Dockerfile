@@ -6,10 +6,10 @@ FROM node:14-alpine
 WORKDIR /usr/index
 
 # Create a directory for the app
-RUN mkdir -p /usr/index/backendAcademic
+RUN mkdir -p /usr/backendAcademic
 
 # Set the working directory to the React app
-WORKDIR /usr/index/backendAcademic
+WORKDIR /usr/backendAcademic
 
 # Copy package.json and package-lock.json to the working directory
 COPY Backend/backendAcademic/package*.json ./
