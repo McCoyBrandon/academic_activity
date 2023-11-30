@@ -10,11 +10,12 @@ jobs:
       - run:
           name: Install Dependencies
           command: npm install
-          working_directory: Frontend/AcademicTool/components
+          working_directory: Frontend/AcademicTool
+
       - run:
           name: Run Tests
           command: npm test
-          working_directory: Frontend/AcademicTool/components
+          working_directory: Frontend/AcademicTool
 
       - run:
           name: "Build Frontend Docker Image"
@@ -41,6 +42,7 @@ jobs:
           name: Install Dependencies
           command: npm install
           working_directory: Backend/backendAcademic
+
       - run:
           name: Run Tests
           command: npm test 
