@@ -11,7 +11,7 @@ WORKDIR /usr/src/app
 # WORKDIR /usr/src/app/AcademicTool
 
 # Copy package.json and package-lock.json to the working directory
-COPY  package*.json .
+COPY  Frontend/AcademicTool/package*.json ./
 
 # Install the application dependencies
 RUN npm ci
