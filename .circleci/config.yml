@@ -73,8 +73,7 @@ jobs:
       - run:
           name: "Load and Push Frontend Image"
           command: |
-      
-            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push harish492/frontend-image:latest
 
   backend-tests:
