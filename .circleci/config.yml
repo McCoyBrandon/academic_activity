@@ -105,7 +105,7 @@ jobs:
             echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
             docker push harish492/backend-image:latest
       - run:
-          name: "Load and Push Backend Image"
+          name: "compose Image"
           command: |
              docker compose push
 
