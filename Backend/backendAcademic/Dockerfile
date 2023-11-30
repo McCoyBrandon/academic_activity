@@ -15,7 +15,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install
 
 # Copy the entire backend application to the working directory
 COPY . .

@@ -14,7 +14,7 @@ WORKDIR /usr/src/app
 COPY  Frontend/AcademicTool/package*.json ./
 
 # Install the application dependencies
-RUN npm ci
+RUN npm Install
 
 # Copy the application code to the working directory
 COPY . .
