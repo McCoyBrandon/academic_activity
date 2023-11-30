@@ -6,7 +6,16 @@ jobs:
       - image: docker:stable
     steps:
       - checkout
-      - setup_remote_docker
+      
+      - run:
+          name: Install Dependencies
+          command: npm install
+          working_directory: Frontend/AcademicTool/components
+      - run:
+          name: Run Tests
+          command: npm test
+          working_directory: Frontend/AcademicTool/components
+
       - run:
           name: "Build Frontend Docker Image"
           command: |
@@ -18,7 +27,7 @@ jobs:
       - run:
           name: "Load and Push Frontend Image"
           command: |
-            docker load -i frontend-image.tar
+            # docker load -i frontend-image.tar
             echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
             docker push harish492/frontend-image:latest
 
@@ -27,7 +36,16 @@ jobs:
       - image: docker:stable
     steps:
       - checkout
-      - setup_remote_docker
+      
+      - run:
+          name: Install Dependencies
+          command: npm install
+          working_directory: Backend/backendAcademic
+      - run:
+          name: Run Tests
+          command: npm test 
+          working_directory: Backend/backendAcademic
+
       - run:
           name: "Build Backend Docker Image"
           command: |
@@ -47,26 +65,8 @@ workflows:
   version: 2
   Setup_and_Test:
     jobs:
-      - frontend-tests:
-          filters:
-            branches:
-              only:
-                - DockerHarry1
-      - backend-tests:
-          filters:
-            branches:
-              only:
-                - DockerHarry1
-      - build-and-push-frontend:
-          requires:
-            - frontend-tests
-          filters:
-            branches:
-              only:
-                - DockerHarry1
-      - build-and-push-backend:
-          requires:
-            - backend-tests
+      - build-and-push-frontend
+      - build-and-push-backend
           filters:
             branches:
               only:
