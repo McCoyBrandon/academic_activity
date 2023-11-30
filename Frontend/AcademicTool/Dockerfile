@@ -17,7 +17,7 @@ COPY Frontend/AcademicTool/package*.json ./
 RUN npm install
 
 # Copy the application code to the working directory
-COPY Frontend/AcademicTool/ .
+COPY . /AcademicTool
 
 # Build the React app (replace 'npm run' with the actual build script)
 RUN npm run 
