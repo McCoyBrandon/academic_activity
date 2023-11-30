@@ -5,6 +5,7 @@ import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
+import { toast } from "react-toastify";
 
 // Animations
 const fadeIn = keyframes`
@@ -140,7 +141,7 @@ const CreateTask = () => {
                 projectID: projectDetails?._id,
                 status:"In-Progress"
             });
-
+            toast.success("Task Created");
             navigate('/projects/viewProjects/tasks/view');
         } catch (error) {
             console.error('Failed to create project:', error);
@@ -249,8 +250,8 @@ const CreateTask = () => {
                                 >
                                     <option value="">Select Member</option>
                                     {membersList?.map((member) => (
-                                        <option key={member?.id} value={member?.id}>
-                                            {member?.name}
+                                        <option key={member.id} value={member.id}>
+                                            {member.name}
                                         </option>
                                     ))}
                                 </StyledSelect>

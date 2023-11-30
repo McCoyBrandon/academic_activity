@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import email_icon from './Assets/email.png';
 import password_icon from './Assets/password.png';
 import interview from "../src/assets/academic_activity.jpeg"
+import { toast } from "react-toastify";
 
 const LoginSignup = () => {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ const LoginSignup = () => {
     axios.post('http://localhost:5038/api/user/addUsers', pageData)
       .then(res => {
         console.log('Response data:', res.data);
+        toast.success("User Created Successfully .. Now please login");
         navigateTo("/loginScreen");
       })
       .catch(err => console.log('Error:', err));

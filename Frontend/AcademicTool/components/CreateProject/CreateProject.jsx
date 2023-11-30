@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
+import { toast } from "react-toastify";
 
 // Animations
 const fadeIn = keyframes`
@@ -168,7 +169,7 @@ const CreateProjectForm = () => {
         // members: memberIds.map(id => membersList.find(member => member.id === id)),
         // id: JSON.parse(localStorage.getItem("user_creds"))?._id
       });
-
+      toast.success("Project Created");
       history('/projects/viewProjects');
     } catch (error) {
       console.error('Failed to create project:', error);
