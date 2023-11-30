@@ -71,7 +71,7 @@ jobs:
           command: |
             docker save -o frontend-image.tar harish492/frontend-image:latest
       - run:
-          name: "Load and Push Frontend Image"
+          name: "login frontend"
           command: |
             echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push harish492/frontend-image:latest
@@ -90,6 +90,20 @@ jobs:
           name: Run Tests
           command: npm test 
           working_directory: Backend/backendAcademic
+
+      - run:
+          name: "Build Backend Docker Image"
+          command: |
+            docker build -t harish492/backend-image:latest -f Backend/backendAcademic/Dockerfile .
+      - run:
+          name: "Save Backend Image"
+          command: |
+            docker save -o backend-image.tar harish492/backend-image:latest
+      - run:
+          name: "Load and Push Backend Image"
+          command: |
+            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
+            docker push harish492/backend-image:latest
 
 
 workflows:
