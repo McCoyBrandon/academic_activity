@@ -5,13 +5,13 @@ FROM node:14
 WORKDIR /app
 
 # Copy package.json and package-lock.json to the working directory
-COPY Backend/package*.json ./
+COPY Backend/backendAcademic/package*.json ./
 
 # Install dependencies
 RUN npm install
 
 # Copy the entire backend application to the working directory
-COPY Backend/ .
+COPY Backend/backendAcademic/ .
 
 # Expose the port on which the application will run
 EXPOSE 8080

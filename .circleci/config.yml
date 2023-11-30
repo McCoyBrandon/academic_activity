@@ -6,7 +6,6 @@ jobs:
       - image: docker:stable
     steps:
       - checkout
-      
       - run:
           name: Install Dependencies
           command: npm install
@@ -16,6 +15,7 @@ jobs:
           name: Run Tests
           command: npm test
           working_directory: Frontend/AcademicTool
+
 
       - run:
           name: "Build Frontend Docker Image"
