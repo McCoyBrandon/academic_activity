@@ -5,6 +5,7 @@ import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
 import { toast } from "react-toastify";
+import createProject from "../Assets/create-project.avif";
 
 // Animations
 const fadeIn = keyframes`
@@ -21,9 +22,13 @@ const pulseAnimation = keyframes`
 // Styled Components
 const PageContainer = styled('div')({
   minHeight: '100vh',
-  background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
+  // background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
   display: 'flex',
+  background:`url(${createProject})`,
   flexDirection: 'column',
+  backgroundRepeat: 'no-repeat',
+  minHeight: '100vh',
+  backgroundSize: 'cover',
   alignItems: 'center',
   justifyContent: 'center',
   padding: '20px',
@@ -43,7 +48,7 @@ const BackButton = styled('button')({
   border: 'none',
   cursor: 'pointer',
   color: 'black',
-  fontSize: '1.2rem',
+  fontSize: '2.2rem',
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
@@ -53,10 +58,12 @@ const BackButton = styled('button')({
 });
 
 const FormContainer = styled('div')({
-  background: 'white',
+  // background: 'white',
   padding: '40px',
   width:"550px",
   borderRadius: '20px',
+  background:"#ffffff90",
+
   // boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
   maxWidth: '800px',
   animation: `${fadeIn} 1s ease-out`,
