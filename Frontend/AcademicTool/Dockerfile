@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a base image
-FROM node:14-alpine
+FROM node:latest
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
@@ -17,7 +17,7 @@ COPY  Frontend/AcademicTool/package*.json ./
 RUN npm install
 
 # Copy the application code to the working directory
-COPY . .
+COPY Frontend/AcademicTool/ .
 
 # # Build the React app (replace 'npm run' with the actual build script)
 # RUN npm run 
