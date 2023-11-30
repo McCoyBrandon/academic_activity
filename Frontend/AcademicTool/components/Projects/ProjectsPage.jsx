@@ -8,7 +8,7 @@ import projectView from '../../components/Assets/createMyProj.webp';
 import projectCreate from '../../components/Assets/viewMyProj.png';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button'; // Import the Button component
-
+import ProjectManagement from '../Assets/project-page-background.jpeg'
 const DashboardContainer = styled('div')({
     display: 'flex',
     flexWrap: 'wrap',
@@ -21,8 +21,13 @@ const ProjectsPageDiv = styled('div')({
 
     padding: '40px 20px',
     animation: 'fadeIn 1s ease-in-out',
-    background: 'linear-gradient(45deg, #6DD5FA, #FF758C)',
+    background: `url(${ProjectManagement})`, 
+
+    // background: 'linear-gradient(45deg, #6DD5FA, #FF758C)',
     minHeight: '100vh',
+    backgroundRepeat: 'no-repeat',
+    // minHeight: '100vh',
+    backgroundSize: 'cover', 
 });
 
 const StyledCard = styled(Card)({
@@ -35,6 +40,8 @@ const StyledCard = styled(Card)({
         boxShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.2)',
     },
     borderRadius: 20,
+    background:'#ffffff80'
+
 });
 
 const Content = styled(CardContent)({

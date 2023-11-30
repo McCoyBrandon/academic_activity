@@ -5,7 +5,8 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 import ProjectsImg from '../../components/Assets/project.jpeg';
-import CoursesImg from '../../components/Assets/calender.avif';
+import CoursesImg from '../../components/Assets/calender.png';
+import ProjectManagement from '../../src/assets/project-management.jpeg';
 import PlanImg from '../../components/Assets/course1.png';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,8 +16,10 @@ const DashboardContainer = styled('div')({
     justifyContent: 'space-evenly', 
     padding: '40px 20px', 
     animation: 'fadeIn 1s ease-in-out',
-    background: 'linear-gradient(45deg, #6DD5FA, #FF758C)', 
+    background: `url(${ProjectManagement})`, 
+    backgroundRepeat: 'no-repeat',
     minHeight: '100vh',
+    backgroundSize: 'cover', 
     alignItems: 'center',
 });
 
@@ -24,6 +27,7 @@ const StyledCard = styled(Card)({
     width: 'calc(33% - 40px)', 
     margin: '20px', 
     height: 'auto',
+    background:"#ffffff90",
     transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
     '&:hover': {
         transform: 'scale(1.05)',
