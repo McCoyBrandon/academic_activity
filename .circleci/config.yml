@@ -65,16 +65,16 @@ jobs:
       - run:
           name: "Build Frontend Docker Image"
           command: |
-            docker build -t harish492/frontend-image:latest -f Frontend/AcademicTool/Dockerfile .
+            docker build -t mccoybs/docker_assignment:AA_FE_latest -f Frontend/AcademicTool/Dockerfile .
       - run:
           name: "Save Frontend Image"
           command: |
-            docker save -o frontend-image.tar harish492/frontend-image:latest
+            docker save -o frontend-image.tar mccoybs/docker_assignment:AA_FE_latest
       - run:
           name: "login frontend"
           command: |
-            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-            docker push harish492/frontend-image:latest
+            echo $DOCKERHUB_PASS | docker login -u $DOCKER_USERNAME --password-stdin
+            docker push mccoybs/docker_assignment:AA_FE_latest
 
   backend-tests:
     machine:
@@ -94,16 +94,16 @@ jobs:
       - run:
           name: "Build Backend Docker Image"
           command: |
-            docker build -t harish492/backend-image:latest -f Backend/backendAcademic/Dockerfile .
+            docker build -t mccoybs/docker_assignment:AA_FE_latest -f Backend/backendAcademic/Dockerfile .
       - run:
           name: "Save Backend Image"
           command: |
-            docker save -o backend-image.tar harish492/backend-image:latest
+            docker save -o backend-image.tar mccoybs/docker_assignment:AA_FE_latest
       - run:
           name: "Load and Push Backend Image"
           command: |
-            echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin
-            docker push harish492/backend-image:latest
+            echo $DOCKERHUB_PASS | docker login --username $DOCKER_USERNAME --password-stdin
+            docker push mccoybs/docker_assignment:AA_FE_latest
       - run:
           name: "compose Image"
           command: |
