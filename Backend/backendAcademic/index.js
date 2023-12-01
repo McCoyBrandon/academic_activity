@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const multer = require('multer');
 const { default: mongoose } = require("mongoose");
+const {ObjectId}=require('mongodb');
 
 const app = express();
 app.use(cors());
@@ -82,7 +83,7 @@ app.put('/api/user/updatePassword', (request, response) => {
   const updatedData = request.body;
   const userID = request.query.userID;
 
-  database.collection("ProjectTasks").updateOne(
+  database.collection("user_credentials").updateOne(
       {"_id":userID}, // Define the filter to match the document(s) you want to update.
       { $set: updatedData }, // Use $set to update specific fields with the new data.
       (error, result) => {
@@ -146,7 +147,7 @@ app.get('/api/user/viewAllProjects', (request, response) => {
   app.delete('/api/user/deleteProject', (request, response) =>{
     const projectID = request.query.projectID;
     console.log(request.query.projectID);
-    database.collection("UserProjects").deleteOne({"_id":projectID},(error,result) =>
+    database.collection("UserProjects").deleteOne({"_id":ObjectId(projectID)},(error,result) =>
     {
         if (error) {
             console.error('Error deleting data from MongoDB:',error);
@@ -323,7 +324,7 @@ app.get('/api/user/viewAllTasks', (request, response) => {
   app.delete('/api/user/userDeleteTask', (request, response) => {
     const taskID = request.query.taskID;
   
-    database.collection('ProjectTasks').deleteOne({"_id":taskID}, (error, result) => {
+    database.collection('ProjectTasks').deleteOne({"_id":ObjectId(taskID)}, (error, result) => {
       if (error) {
         console.error('Error deleting data from MongoDB:', error);
         response.status(500).send('Internal Server Error');
@@ -337,13 +338,12 @@ app.get('/api/user/viewAllTasks', (request, response) => {
     });
   });
 
-  //this request update the task
   app.put('/api/user/updateTasks', (request, response) => {
     const updatedData = request.body;
     const taskID = request.query.taskID;
 
     database.collection("ProjectTasks").updateOne(
-        {"_id":taskID}, // Define the filter to match the document(s) you want to update.
+      {"_id":ObjectId(taskID)}, // Define the filter to match the document(s) you want to update.
         { $set: updatedData }, // Use $set to update specific fields with the new data.
         (error, result) => {
             if (error) {
@@ -405,7 +405,7 @@ app.get('/api/user/viewReferencesByProject', (request, response) => {
 app.delete('/api/user/deleteReferences', (request, response) =>{
   const referenceID = request.query.referenceID;
   console.log(request.query.referenceID);
-  database.collection("References").deleteOne({"_id":referenceID}, (error,result) =>
+  database.collection("References").deleteOne({"_id":ObjectId(referenceID)}, (error,result) =>
   {
       if (error) {
           console.error('Error deleting data from MongoDB:',error);

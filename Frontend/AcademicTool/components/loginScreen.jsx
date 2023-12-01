@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import email_icon from './Assets/email.png';
 import password_icon from './Assets/password.png';
 import interview from "../src/assets/academic_activity.jpeg"
+import { toast } from "react-toastify";
 
 const LoginScreen = () => {
   const [formData, setFormData] = useState({
@@ -47,6 +48,7 @@ const LoginScreen = () => {
           localStorage.setItem("email", formData?.email);
           localStorage.setItem("password", formData?.password)
           localStorage.setItem("user_creds",JSON.stringify(response.data[0]))
+          toast.success("logged In");
           navigateTo("/dashboard");
 
         } else {
@@ -141,7 +143,7 @@ const LoginScreen = () => {
 
             <div className="student-login-section bg-gradient-to-r from-blue-100 to-teal-100 p-5 rounded-lg shadow-md mt-5">
               <div className="flex items-center justify-center">
-                <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome, Students!</h2>
+                <h2 className="text-lg font-semibold text-gray-700 mr-4">Welcome!</h2>
                 <Link to={"/signUp"} className="text-white font-bold py-1 px-3 rounded-full transition duration-300 transform hover:scale-110 bg-gradient-to-r from-blue-500 to-teal-400 hover:from-blue-600 hover:to-teal-500 shadow-lg hover:shadow-xl">
                   Signup Here!
                 </Link>

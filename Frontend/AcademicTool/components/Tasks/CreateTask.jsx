@@ -5,6 +5,8 @@ import { keyframes } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import { ArrowBack, GroupAdd, Description, Assignment } from '@mui/icons-material';
+import { toast } from "react-toastify";
+import createTask from "../Assets/createTask.jpeg";
 
 // Animations
 const fadeIn = keyframes`
@@ -15,16 +17,21 @@ const fadeIn = keyframes`
 // Styled Components
 const PageContainer = styled('div')({
   minHeight: '100vh',
-  background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
+//   background: 'linear-gradient(to right, #6DD5FA50, #FF758C50)',
   display: 'flex',
+  background:`url(${createTask})`,
+  backgroundRepeat: 'no-repeat',
+  maxHeight: '90vh',
+  backgroundSize: 'cover', 
   flexDirection: 'column',
+//   maxHeight:"90%",
   alignItems: 'center',
   justifyContent: 'center',
   padding: '20px',
 });
 
 const FormContainer = styled('div')({
-  background: 'white',
+  background: '#ffffff90',
   padding: '40px',
   borderRadius: '15px',
   boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
@@ -140,7 +147,7 @@ const CreateTask = () => {
                 projectID: projectDetails?._id,
                 status:"In-Progress"
             });
-
+            toast.success("Task Created");
             navigate('/projects/viewProjects/tasks/view');
         } catch (error) {
             console.error('Failed to create project:', error);
@@ -181,7 +188,7 @@ const CreateTask = () => {
 
     return (
         <>
-            <div style={{ display: "flex", justifyContent: "space-between", color: 'black', padding: "10px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between",background:"#FFB23390", color: 'black', padding: "15px" }}>
                 <div>
                     {projectDetails.projectName && (
                         <div className='font-bold'>
@@ -249,8 +256,8 @@ const CreateTask = () => {
                                 >
                                     <option value="">Select Member</option>
                                     {membersList?.map((member) => (
-                                        <option key={member?.id} value={member?.id}>
-                                            {member?.name}
+                                        <option key={member.id} value={member.id}>
+                                            {member.name}
                                         </option>
                                     ))}
                                 </StyledSelect>

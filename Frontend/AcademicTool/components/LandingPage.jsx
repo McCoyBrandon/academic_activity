@@ -17,7 +17,7 @@ const LandingPage = () => {
     return (
         <div className="mx-auto p-8 bg-gradient-to-r ">
             <header className="flex justify-between items-center py-4 bg-white ">
-                <h1 className="text-4xl font-bold text-blue-600">Academic Tracker</h1>
+                <h1 className="text-4xl font-bold text-blue-600">Academic Activity Tracker</h1>
                 <div>
                     <button className="bg-blue-500 text-white px-4 py-2 rounded mr-5 hover:bg-blue-700" onClick={signup}>Sign Up</button>
                     <button className="bg-green-500 px-4 py-2 rounded hover:bg-green-700" onClick={login}>Sign In</button>
