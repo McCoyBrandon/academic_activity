@@ -1,20 +1,29 @@
+# establishing docker version
 version: '3'
 
+# Start list of services being provided by compose
 services:
+  # Establishing the front end image, include the image name and tag.
   frontend:
-    image: harish492/frontend-image:latest
+    image: mccoybs/docker_assignment:AA_FE_latest
+    # Ports that are required to make the frontend work.
     ports:
       - "3000:3000"
+    # Assigns image to the nework that joins the two images.
     networks:
       - my-network
 
+  # Establishing the back end image, include the image name and tag.
   backend:
-    image: harish492/backend-image:latest
+    image: mccoybs/docker_assignment:AA_BE_latest
+    # Ports that are required to make the frontend work.
     ports:
       - "8080:8080"
+    # Assigns image to the nework that joins the two images.
     networks:
       - my-network
 
+# Sets up the network that using a driver to bridge the two images.
 networks:
   my-network:
     driver: bridge
