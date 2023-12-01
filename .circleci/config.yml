@@ -94,16 +94,16 @@ jobs:
       - run:
           name: "Build Backend Docker Image"
           command: |
-            docker build -t mccoybs/docker_assignment:AA_FE_latest -f Backend/backendAcademic/Dockerfile .
+            docker build -t mccoybs/docker_assignment:AA_BE_latest -f Backend/backendAcademic/Dockerfile .
       - run:
           name: "Save Backend Image"
           command: |
-            docker save -o backend-image.tar mccoybs/docker_assignment:AA_FE_latest
+            docker save -o backend-image.tar mccoybs/docker_assignment:AA_BE_latest
       - run:
           name: "Load and Push Backend Image"
           command: |
             echo ihatedocker | docker login --username mccoybs --password-stdin
-            docker push mccoybs/docker_assignment:AA_FE_latest
+            docker push mccoybs/docker_assignment:AA_BE_latest
       - run:
           name: "compose Image"
           command: |
