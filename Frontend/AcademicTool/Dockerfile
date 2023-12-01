@@ -23,7 +23,7 @@ COPY Frontend/AcademicTool/ .
 RUN npm run 
 
 # Expose the port that the app will run on
-EXPOSE 3000
+EXPOSE 5173
 
 # Define the command to run the application
 CMD ["npm", "run", "dev"]
