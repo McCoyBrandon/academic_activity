@@ -73,7 +73,7 @@ jobs:
       - run:
           name: "login frontend"
           command: |
-            echo $DOCKERHUB_PASS | docker login -u $DOCKER_USERNAME --password-stdin
+            echo ihatedocker | docker login -u mccoybs --password-stdin
             docker push mccoybs/docker_assignment:AA_FE_latest
 
   backend-tests:
@@ -102,7 +102,7 @@ jobs:
       - run:
           name: "Load and Push Backend Image"
           command: |
-            echo $DOCKERHUB_PASS | docker login --username $DOCKER_USERNAME --password-stdin
+            echo ihatedocker | docker login --username mccoybs --password-stdin
             docker push mccoybs/docker_assignment:AA_FE_latest
       - run:
           name: "compose Image"
