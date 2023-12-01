@@ -83,7 +83,7 @@ app.put('/api/user/updatePassword', (request, response) => {
   const updatedData = request.body;
   const userID = request.query.userID;
 
-  database.collection("ProjectTasks").updateOne(
+  database.collection("user_credentials").updateOne(
       {"_id":userID}, // Define the filter to match the document(s) you want to update.
       { $set: updatedData }, // Use $set to update specific fields with the new data.
       (error, result) => {
