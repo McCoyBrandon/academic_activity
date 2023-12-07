@@ -5,6 +5,7 @@ version: '3'
 services:
   # Establishing the front end image, include the image name and tag.
   frontend:
+    ## PERSONALIZATION: Update username to your Docker username
     image: mccoybs/docker_assignment:AA_FE_latest
     # Ports that are required to make the frontend work.
     ports:
@@ -15,6 +16,7 @@ services:
 
   # Establishing the back end image, include the image name and tag.
   backend:
+    ## PERSONALIZATION: Update username to your Docker username
     image: mccoybs/docker_assignment:AA_BE_latest
     # Ports that are required to make the frontend work.
     ports:

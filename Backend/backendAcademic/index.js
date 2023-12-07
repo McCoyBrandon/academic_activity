@@ -10,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// PERSONALIZATION: For personalized envrionments you will need to update the next two lines to your personal data connections.
 var CONNECTION_STRING = "mongodb+srv://harish:1234567890@cluster0.xbtdjvm.mongodb.net/?retryWrites=true&w=majority";
 var DATABASESNAME = "user-academic-activity";
 var database;
@@ -167,7 +168,7 @@ app.put('/api/user/updateProjects', (request, response) => {
   const updatedData = request.body;
   const projectID = request.query.projectID;
 
-  database.collection("UserProject").updateOne(
+  database.collection("UserProjects").updateOne(
       {"_id":projectID}, // Define the filter to match the document(s) you want to update.
       { $set: updatedData }, // Use $set to update specific fields with the new data.
       (error, result) => {
