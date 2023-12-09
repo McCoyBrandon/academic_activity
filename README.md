@@ -163,8 +163,8 @@ docker build -t harish492/docker_assignment:AA_BE_latest -f Backend/backendAcade
 
 **Verify it’s running:**
 ```
-docker run -d –name backend-container --network bridge_network -p 5038:5038 backend-image
-docker run -d –name frontend-container --network bridge_network -p 5173:8080 frontend-image
+ docker run -p 5038:5038 harish492/docker_assignment:AA_BE_latest
+ docker run -p 5173:8080 harish492/docker_assignment:AA_FE_latest
 ```
 
 **Run the containers on the bridged network:**
