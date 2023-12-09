@@ -12,7 +12,7 @@ WORKDIR /app
 # WORKDIR /usr/src/app/AcademicTool
 
 # Copy package.json and package-lock.json to the working directory
- COPY Frontend/AcademicTool/package*.json .
+ COPY Frontend/AcademicTool/package*.json ./
 #COPY package*.json ./
 
 # Install the application dependencies
