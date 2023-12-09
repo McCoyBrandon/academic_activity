@@ -102,7 +102,7 @@ CircleCI:
 Docker:
 1. \docker-compose.yml
 2. \Backend\backendAcademic\Dockerfile
-3. \Frontend\Dockerfile
+3. \Frontend\AcademicTool\Dockerfile
 
 ### Unit Testing Code Cases
 Our unit testing is set up two locations, one for frontend and other for backend. These are called when the CircleCi and Docker are set up. But you can run them separately as well by using the Jest run. You are welcome to review these test cases and add on as you find necessary for your needs and improvement to the program.
@@ -155,21 +155,21 @@ docker network create bridge_network
 
 **Build the docker images for the containers:**
 ```
-cd path/to/backend
-docker build -t backend-image .
+cd path \academic_activity>
+docker build -t harish492/docker_assignment:AA_FE_latest -f Frontend/AcademicTool/Dockerfile .
 cd path/to/frontend
-docker build -t frontend-image .
+docker build -t harish492/docker_assignment:AA_BE_latest -f Backend/backendAcademic/Dockerfile .
 ```
 
 **Verify it’s running:**
 ```
-docker run -d –name backend-container --network bridge_network -p 5173:8080 backend-image
-docker run -d –name frontend-container --network bridge_network -p 5093:3000 frontend-image
+docker run -d –name backend-container --network bridge_network -p 5038:5038 backend-image
+docker run -d –name frontend-container --network bridge_network -p 5173:8080 frontend-image
 ```
 
 **Run the containers on the bridged network:**
 ```
-docker compose --build
+docker-compose up --build
 ```
 
 **(Optional) Check Docker status:**
