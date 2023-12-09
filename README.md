@@ -189,14 +189,19 @@ Other enhancements could include API integrations with existing common education
 ***For student classes***
 + Canvas
 
-***For programming students ***
-+ Jira, GitHub
+***For programming students***
++ Jira
++ GitHub
 
 ***Industry project management systems***
-+ Asana, Quickbase, Zoho
++ Asana 
++ Quickbase
++ Zoho
 
 ***Other primary calendars***
-+ Outlook, Google, Apple
++ Outlook 
++ Google
++ Apple
 
 ***Other***
 + Spinit exercise or task randomizer.
