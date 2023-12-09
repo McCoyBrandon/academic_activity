@@ -109,7 +109,7 @@ Frontend:
 Backend:
 + \Backend\backendAcademic\test
 
-Additionally on the backend we used Postman to test our APIs.  [Postman](www.postman.com) is a API integration tool that that can be used via an internet browser.  But at this moment we were having difficulties to get the Postman unit testing to work correctly with their Newman integration with CircleCI and Docker.  Postman is very easy to get started and testing your invidual code. But we ran into some integration troubles our team was not familiar enough to handle the learning curve in provided time.  So when considering longer term investment and what is sustainable for a team environment, we recommend using Jest. We have started moving our backend testing to Jest because it is the primary tester for the frontendaf, was much easier to handle compatability/version control, and uses code that's tangible in your repository.  Unless you are familiar with the Postman, CircleCI, and Docker integration while using a bridged Docker environment, we recommend investing your learning in the Jest framework if you want to limit how much time required to navigate integrating that many different frameworks. And limit Postman to a quick API builder before you push it to the team for further unit testing.
+Additionally on the backend we used Postman to test our APIs.  [Postman](www.postman.com) is a API integration tool that that can be used via an internet browser.  But at this moment we were having difficulties to get the Postman unit testing to work correctly with their Newman integration with CircleCI and Docker.  Postman is very easy to get started and testing your invidual code. But we ran into some integration troubles we weren't able to resolve as our attention was needed on other tasks.  So when considering longer term investment and what is sustainable for a team environment, we recommend using [Jest](https://jestjs.io/). We have started moving our backend testing to Jest because it is the primary tester for the frontendaf, was much easier to handle compatability/version control, and uses code that's tangible in your repository.  Unless you are familiar with the Postman, CircleCI, and Docker integration while using a bridged Docker environment, we recommend investing your learning in the Jest framework if you want to limit how much time required to get going. And limit Postman to a quick API builder before you push it to the repository for further unit testing and team integration. This will also make sure everyone is working on the same API code versions.
 
 ## Running the program
 ### Instructions to run the app without Docker:
@@ -188,6 +188,6 @@ Other enhancements could include API integrations with existing common education
 ***Other primary calendars***
 + Outlook, Google, Apple
 
-***Other**
+***Other***
 + Spinit exercise or task randomizer.
 + Personal life managers such as health and dieting tracking.
