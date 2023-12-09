@@ -1,0 +1,24 @@
+//
+//  THIS FILE IS NOT USED WITHIN PROGRAM. IT WAS USED AS REFERENCE AND TESTING BETWEEN PROJECT MEMBERS. THEN DEVELOPED FURTHER ELSEWHERE THAT MET PROJECT NEEDS.
+//  THIS WAS RETAINED AS A REFERENCE LOCATION FOR 'REFERENCE' PROGRAMMING
+
+{
+    /* 
+    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when using get or delete.
+    */ 
+    //"referenceID": "_ID referenceID",
+    "projectID": "_ID project reference",
+    "taskID": "_ID task reference", 
+    "priority": "high/medium/low",
+    "reference": "Shorthand title",
+    "title": "Title as presented on publication",
+    "author": "John Doe, Jane Doe",
+    "publisher": "Publisher Company",
+    "year": "2023",
+    "journal": "Journal of cool stuff",
+    "volume": "42",
+    "issue": "7",
+    "pages": "1-10",
+    "url": "journal.com/linktoartical",
+    "subject": "AI"
+}
