@@ -6,6 +6,10 @@
 + Vineetha Ravulapalli
 + Brandon McCoy
 
+GitHub Repository:
+https://github.com/McCoyBrandon/academic_activity
+
+
 # Product Objective:
 The goal of this product is to create a task tracking tool that could be used for helping individual students and/or researchers manage their scholarly work and to retain the activities to create an academic portfolio.  It could also act as a reference engine to assist with finding materials from projects you worked on in the past. By creating a project manager that includes descriptions, references, and categorical tags it could assist academics refer back to sources of previous work. And from their ‘project completion list’ the portfolio assistant could create activity reports and possibly even a CV.
 
@@ -171,7 +175,7 @@ docker ps
 **Open the app in your browser:**
 > http://localhost:3000
 
-## Suggestions for Future Development:
+# Suggestions for Future Development:
 ***Ability to create reports:***
 + Yearly activity reports for performance reviews
 + Curriculum vitae for job search or research profile
