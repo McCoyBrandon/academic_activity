@@ -163,17 +163,22 @@ docker build -t frontend-image .
 
 **Verify it’s running:**
 ```
-docker run -d –name backend-container --network bridge_network -p 8080:8080 backend-image
-docker run -d –name frontend-container --network bridge_network -p 3000:3000 frontend-image
+docker run -d –name backend-container --network bridge_network -p 5173:8080 backend-image
+docker run -d –name frontend-container --network bridge_network -p 5093:3000 frontend-image
 ```
 
 **Run the containers on the bridged network:**
+```
+docker compose --build
+```
+
+**(Optional) Check Docker status:**
 ```
 docker ps
 ```
 
 **Open the app in your browser:**
-> http://localhost:3000
+> http://localhost:5173
 
 # Suggestions for Future Development:
 ***Ability to create reports:***
