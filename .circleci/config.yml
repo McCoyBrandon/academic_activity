@@ -65,7 +65,7 @@ jobs:
           name: "Load and Push Backend Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            echo $DOCKERHUB_PASS | docker login --username harish492 --password-stdin
+            echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
             docker push harish492/docker_assignment:AA_BE_latest
       - run:
           name: "compose Image8"
