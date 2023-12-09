@@ -68,7 +68,7 @@ jobs:
             echo $DOCKERHUB_PASS | docker login --username harish492 --password-stdin
             docker push harish492/docker_assignment:AA_BE_latest
       - run:
-          name: "compose Image"
+          name: "compose Image8"
           command: |
              docker compose push
 
