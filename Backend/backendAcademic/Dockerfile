@@ -21,7 +21,7 @@ RUN npm install
 COPY Backend/backendAcademic/ .
 
 # Expose the port on which the application will run
-EXPOSE 8080
+EXPOSE 5038
 
 # Command to run the application
 CMD ["node", "index"]

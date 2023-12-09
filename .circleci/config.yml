@@ -23,18 +23,18 @@ jobs:
           name: "Build Frontend Docker Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            docker build -t mccoybs/docker_assignment:AA_FE_latest -f Frontend/AcademicTool/Dockerfile .
+            docker build -t harish492/docker_assignment:AA_FE_latest -f Frontend/AcademicTool/Dockerfile .
       - run:
           name: "Save Frontend Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            docker save -o frontend-image.tar mccoybs/docker_assignment:AA_FE_latest
+            docker save -o frontend-image.tar harish492/docker_assignment:AA_FE_latest
       - run:
           name: "login frontend"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            echo $DOCKERHUB_PASS | docker login -u mccoybs --password-stdin
-            docker push mccoybs/docker_assignment:AA_FE_latest
+            echo $DOCKERHUB_PASS | docker login -u harish492 --password-stdin
+            docker push harish492/docker_assignment:AA_FE_latest
 
   backend-tests:
     machine:
@@ -55,18 +55,18 @@ jobs:
           name: "Build Backend Docker Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            docker build -t mccoybs/docker_assignment:AA_BE_latest -f Backend/backendAcademic/Dockerfile .
+            docker build -t harish492/docker_assignment:AA_BE_latest -f Backend/backendAcademic/Dockerfile .
       - run:
           name: "Save Backend Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            docker save -o backend-image.tar mccoybs/docker_assignment:AA_BE_latest
+            docker save -o backend-image.tar harish492/docker_assignment:AA_BE_latest
       - run:
           name: "Load and Push Backend Image"
           command: |
             ## PERSONALIZATION: Update username to your Docker username or CircleCI environment variable.
-            echo $DOCKERHUB_PASS | docker login --username mccoybs --password-stdin
-            docker push mccoybs/docker_assignment:AA_BE_latest
+            echo $DOCKERHUB_PASS | docker login --username harish492 --password-stdin
+            docker push harish492/docker_assignment:AA_BE_latest
       - run:
           name: "compose Image"
           command: |

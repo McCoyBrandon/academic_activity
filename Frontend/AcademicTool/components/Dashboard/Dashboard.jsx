@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import styled from '@emotion/styled';
 import ProjectsImg from '../../components/Assets/project.jpeg';
 import CoursesImg from '../../components/Assets/calender.png';
-import ProjectManagement from '../../src/assets/project-management.jpeg';
+import ProjectManagement from '../../components/Assets/project-management.jpeg';
 import PlanImg from '../../components/Assets/course1.png';
 import { useNavigate } from 'react-router-dom';
 

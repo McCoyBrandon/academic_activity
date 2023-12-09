@@ -5,7 +5,7 @@ import user_icon from './Assets/person.png';
 import { Link, useNavigate } from 'react-router-dom';
 import email_icon from './Assets/email.png';
 import password_icon from './Assets/password.png';
-import interview from "../src/assets/academic_activity.jpeg"
+import interview from "./Assets/Academic_activity.jpeg"
 import { toast } from "react-toastify";
 
 const LoginSignup = () => {
