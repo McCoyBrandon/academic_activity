@@ -1,0 +1,46 @@
+//
+//  THIS FILE IS NOT USED WITHIN PROGRAM. IT WAS USED AS REFERENCE AND TESTING BETWEEN PROJECT MEMBERS. THEN DEVELOPED FURTHER ELSEWHERE THAT MET PROJECT NEEDS.
+//  THIS WAS RETAINED AS A REFERENCE DOCUMENTATION FOR 'PROJECT' PROGRAMMING
+
+{
+    /* 
+    Commented out as it will be asssigned by MongoDB and should not be included in the create JSON files. But used when using get or delete.
+    */
+    //"_ID": "*MongoDB_ID*",
+    "projectName": "CSCI5003 Group Project",
+    "ownerID": "*MongoDB_ID for the user owner",
+    "priority": "high/medium/low",
+    "members": [
+        { 
+            "memberID": "_ID of user"
+            //"userName": "User name for display"
+        },
+        { 
+            "memberID": "_ID of user"
+            //"userName": "User name for display"
+        }
+    ], 
+    "description": "Group project for CSCI 5030. Please refer to the README file.",
+    "name": "CSCI Group Project: Academic Activity",
+    "taskList": [
+        { 
+            "taskID": "_ID of task",
+            "taskName": "Shorthand title"
+        },
+        { 
+            "taskID": "_ID of task",
+            "taskName": "Shorthand title"
+        }
+    ],
+    "completed": "Binary (1 or 0) if the project is completed or not.",
+    "reference": [
+        { 
+            "referenceID": "_ID of user",
+            "reference": "Shorthand title"
+        },
+        { 
+            "referenceID": "_ID of user",
+            "reference": "Shorthand title"
+        }
+    ] 
+}
